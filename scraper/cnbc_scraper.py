@@ -3,6 +3,7 @@ import time
 import newspaper
 import hashlib
 from bs4 import BeautifulSoup
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 class CNBCScraper:
@@ -33,29 +34,33 @@ class CNBCScraper:
                 l.write(f'{msg}{end}')
             print(msg, end=end)
 
+    def process_link(self, enum):
+        idx, link = enum
+        if 'reuters-america-update-' in link:
+            self.log(f'Skipping article #{idx + 1}...{link}')
+            return
+        tmp = requests.get(link)
+        soup = BeautifulSoup(tmp.text, 'html.parser')
+        points = soup.find('div', class_='KeyPoints-list')
+        if points != None:
+            article = newspaper.Article(link)
+            article.download()
+            article.parse()
+            key_pts = points.text
+            article_id = CNBCScraper.generate_doc_id(article.title)
+            with open(f'../data/texts/{article_id}.txt', 'w+') as f:
+                f.write(article.text)
+            with open(f'../data/points/{article_id}.txt', 'w+') as f:
+                f.write(key_pts)
+            self.log(f'Downloading article #{idx + 1}...', end='')
+            self.log(f'"{article.title}"...', end='')
+            self.log('done.')
+        else:
+            self.log(f'Skipping article #{idx + 1}...{link}')
+
     def scrape(self):
-        for idx, link in enumerate(self.links):
-            if 'reuters-america-update-' in link:
-                self.log(f'Skipping article #{idx + 1}...{link}')
-                continue
-            tmp = requests.get(link)
-            soup = BeautifulSoup(tmp.text, 'html.parser')
-            points = soup.find('div', class_='KeyPoints-list')
-            if points != None:
-                self.log(f'Downloading article #{idx + 1}...', end='')
-                article = newspaper.Article(link)
-                article.download()
-                article.parse()
-                key_pts = points.text
-                article_id = CNBCScraper.generate_doc_id(article.title)
-                with open(f'../data/texts/{article_id}.txt', 'w+') as f:
-                    f.write(article.text)
-                with open(f'../data/points/{article_id}.txt', 'w+') as f:
-                    f.write(key_pts)
-                self.log(f'"{article.title}"...', end='')
-                self.log('done.')
-            else:
-                self.log(f'Skipping article #{idx + 1}...{link}')
+        pool = ThreadPool(4)
+        _ = pool.map(self.process_link, enumerate(self.links))
 
 
 if __name__ == '__main__':
