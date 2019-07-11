@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7787c89c-4786-40b1-a784-c8bdef5506eb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/model/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc_processor/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/doc_processor/processor.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,7 +16,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scraper/cnbc_scraper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="825">
+            <state relative-caret-position="756">
               <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -28,20 +25,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scraper/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/doc_processor/processor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="17" lean-forward="true" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+            <state relative-caret-position="191">
+              <caret line="95" column="17" selection-start-line="95" selection-start-column="17" selection-end-line="95" selection-end-column="17" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -52,8 +40,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="24" column="6" lean-forward="true" selection-start-line="24" selection-end-line="24" selection-end-column="6" />
+            <state relative-caret-position="180">
+              <caret line="10" column="38" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -109,10 +97,11 @@
         <option value="$PROJECT_DIR$/scraper/main.py" />
         <option value="$PROJECT_DIR$/scraper/cnbc_scraper.py" />
         <option value="$PROJECT_DIR$/Pipfile" />
-        <option value="$PROJECT_DIR$/model/model.py" />
         <option value="$PROJECT_DIR$/encoder/process_document.py" />
         <option value="$PROJECT_DIR$/doc_process/process_document.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/model/model.py" />
+        <option value="$PROJECT_DIR$/doc_processor/processor.py" />
       </list>
     </option>
   </component>
@@ -126,6 +115,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -148,11 +138,15 @@
               <item name="reportik" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="reportik" type="b2602c69:ProjectViewProjectNode" />
+              <item name="reportik" type="462c0819:PsiDirectoryNode" />
+              <item name="scraper" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -184,7 +178,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.process_document">
+  <component name="RunManager" selected="Python.processor">
     <configuration name="cnbc_scraper" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="reportik" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -229,7 +223,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="process_document" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="processor" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="reportik" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -237,12 +231,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/doc_process" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/doc_processor" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/doc_process/processor.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/doc_processor/processor.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -254,11 +248,11 @@
     <list>
       <item itemvalue="Python.cnbc_scraper" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.process_document" />
+      <item itemvalue="Python.processor" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.process_document" />
+        <item itemvalue="Python.processor" />
         <item itemvalue="Python.cnbc_scraper" />
         <item itemvalue="Python.main" />
       </list>
@@ -280,7 +274,8 @@
       <workItem from="1562641842409" duration="983000" />
       <workItem from="1562678091357" duration="201000" />
       <workItem from="1562700902403" duration="3421000" />
-      <workItem from="1562789005528" duration="11256000" />
+      <workItem from="1562789005528" duration="11595000" />
+      <workItem from="1562859235322" duration="8316000" />
     </task>
     <task id="LOCAL-00001" summary="Add multithreaded scraper">
       <created>1562708266585</created>
@@ -293,13 +288,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32177000" />
+    <option name="totallyTimeSpent" value="40832000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27110156" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2746781" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -310,7 +305,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32891566" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007153" side_tool="true" weight="0.32891566" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.32891566" />
@@ -320,7 +315,7 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" weight="0.3297568" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="310" height="677" id="Documentation" order="5" side_tool="true" visible="true" weight="0.3297568" />
+      <window_info anchor="right" x="0" y="0" width="310" height="677" id="Documentation" order="5" side_tool="true" weight="0.3297568" />
     </layout>
     <layout-to-restore>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27110156" />
@@ -358,31 +353,32 @@
     <option name="LAST_COMMIT_MESSAGE" value="Add multithreaded scraper" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/reportik$processor.coverage" NAME="processor Coverage Results" MODIFIED="1562888600775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/doc_processor" />
     <SUITE FILE_PATH="coverage/reportik$main.coverage" NAME="main Coverage Results" MODIFIED="1562557046452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scraper" />
     <SUITE FILE_PATH="coverage/reportik$cnbc_scraper.coverage" NAME="cnbc_scraper Coverage Results" MODIFIED="1562702119055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scraper" />
     <SUITE FILE_PATH="coverage/reportik$process_document.coverage" NAME="process_document Coverage Results" MODIFIED="1562820912197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/doc_process" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scraper/cnbc_data.tsv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="485">
-          <caret line="292" selection-start-line="292" selection-end-line="292" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/data_backups/cnbc_data.tsv">
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
           <column index="0" width="100" />
         </state>
       </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="485">
+          <caret line="292" selection-start-line="292" selection-end-line="292" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scraper/cnbc_data_1562556998.csv" />
     <entry file="file://$PROJECT_DIR$/scraper/cnbc_data_1562557051.csv" />
-    <entry file="file://$PROJECT_DIR$/scraper/cnbc_data_2.csv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="-28620" />
-      </provider>
+    <entry file="file://$PROJECT_DIR$/data_backups/cnbc_data_2.csv">
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="-28620" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scraper/cnbc_sitemap.xml">
@@ -423,27 +419,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scraper/cnbc_scraper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pipfile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="11" column="10" lean-forward="true" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scraper/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
@@ -457,10 +436,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scraper/main.py" />
+    <entry file="file://$PROJECT_DIR$/scraper/cnbc_scraper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="6" lean-forward="true" selection-start-line="24" selection-end-line="24" selection-end-column="6" />
+        <state relative-caret-position="180">
+          <caret line="10" column="38" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -473,8 +463,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/doc_processor/processor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="17" lean-forward="true" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+        <state relative-caret-position="191">
+          <caret line="95" column="17" selection-start-line="95" selection-start-column="17" selection-end-line="95" selection-end-column="17" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
