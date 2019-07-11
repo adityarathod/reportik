@@ -3,6 +3,7 @@
 
 # Data
 data/
+data_backups/
 
 # Logs
 scraper/logs.txt
