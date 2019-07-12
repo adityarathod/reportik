@@ -103,8 +103,6 @@ class DocumentCleaner:
         word_dict['<pad>'] = 0
         self.summaries_word_dict = word_dict
         self.summaries_rev_word_dict = dict([(value, key) for (key, value) in self.summaries_word_dict.items()])
-        print(self.summaries_rev_word_dict)
-        print(self.decode_summary_sequence(self.summaries[1]))
 
     def dump_summaries(self, save_path='../data'):
         with open(f'{save_path}/summaries_clean.pkl', 'wb') as of:
