@@ -5,6 +5,8 @@ import re
 import pickle
 import numpy as np
 
+# Data can also be downloaded from https://dl.bintray.com/applecrazy/Reportik-CNBC-Data/cnbc_data.pkl
+
 
 class DocumentCleaner:
     texts = None
@@ -104,6 +106,16 @@ class DocumentCleaner:
         self.summaries_word_dict = word_dict
         self.summaries_rev_word_dict = dict([(value, key) for (key, value) in self.summaries_word_dict.items()])
 
+    def dump_data(self, save_path='../data'):
+        with open(f'{save_path}/cnbc_data.pkl', 'wb') as of:
+            pickle.dump(
+                (
+                    (self.texts, self.texts_word_dict, self.texts_rev_word_dict),
+                    (self.summaries, self.summaries_word_dict, self.summaries_rev_word_dict)
+                ),
+                of
+            )
+
     def dump_summaries(self, save_path='../data'):
         with open(f'{save_path}/summaries_clean.pkl', 'wb') as of:
             pickle.dump(self.summaries, of)
@@ -117,7 +129,8 @@ if __name__ == '__main__':
     cleaner = DocumentCleaner()
     cleaner.clean_texts()
     cleaner.tokenize_texts()
-    cleaner.dump_texts()
+    # cleaner.dump_texts()
     cleaner.clean_summaries()
     cleaner.tokenize_summaries()
-    cleaner.dump_summaries()
+    # cleaner.dump_summaries()
+    cleaner.dump_data()
