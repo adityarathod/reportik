@@ -1,4 +1,5 @@
 from tensorflow import keras
+import numpy as np
 import os
 import pickle
 
@@ -14,6 +15,7 @@ class NewsSummarizationModel:
     document_vocab_size = None
     encoder = None
     decoder = None
+    model = None
     fixed_vector_dim = 200
     embedding_dim = 128
 
@@ -36,24 +38,39 @@ class NewsSummarizationModel:
             'm': len(self.summaries),
             'input': None,
             'lstm': None,
-            'states': None
+            'dense': None,
+            'out': None
         }
         self.document_vocab_size = len(self.documents_words)
         self.summary_vocab_size = len(self.summaries_words)
 
     def build_encoder(self):
+        # TODO: Add an Embedding layer after the Input layer
         self.encoder['input'] = keras.layers.Input(shape=(None, self.encoder['n']))
         self.encoder['lstm'] = keras.layers.LSTM(self.fixed_vector_dim, return_sequences=True, return_state=True)
         enc_out, h, c = self.encoder['lstm'](self.encoder['input'])
         self.encoder['states'] = [h, c]
 
     def build_decoder(self):
-        # TODO: implement decoder
-        pass
+        # TODO: Add an Embedding layer after the Input layer
+        self.decoder['input'] = keras.layers.Input(shape=(None, self.decoder['n']))
+        self.decoder['lstm'] = keras.layers.LSTM(self.fixed_vector_dim, return_sequences=True, return_state=True)
+        dec_out, _, _ = self.decoder['lstm'](self.decoder['input'], initial_state=self.encoder['states'])
+        # dec_out, _, _ = self.decoder['lstm'](initial_state=self.encoder['states'])
+        self.decoder['dense'] = keras.layers.Dense(self.summary_vocab_size, activation='softmax')
+        self.decoder['out'] = self.decoder['dense'](dec_out)
 
     def build_model(self):
         self.build_encoder()
-        # TODO: call self.build_decoder() once written
+        self.build_decoder()
+        self.model = keras.Model([self.encoder['input'], self.decoder['input']], self.decoder['out'])
+        # self.model = keras.Model(self.encoder['input'], self.decoder['out'])
+        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
+
+    def train(self):
+        summary = np.array(self.summaries)
+        decoder_input = summary[:, 1:]
+        self.model.fit([self.documents, decoder_input], self.summaries)
 
     def view_document_text(self):
         # TODO: translate a sequence of numerical document tokens to actual text
@@ -65,4 +82,6 @@ class NewsSummarizationModel:
 
 if __name__ == '__main__':
     model = NewsSummarizationModel()
-    model.build_encoder()
+    model.build_model()
+    print(model.model.summary())
+    model.train()
