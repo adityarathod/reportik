@@ -1,4 +1,5 @@
 from tensorflow import keras
+import tensorflow as tf
 import numpy as np
 import os
 import pickle
@@ -13,8 +14,8 @@ class NewsSummarizationModel:
     documents_words = None
     documents_words_reverse = None
     document_vocab_size = None
-    encoder = None
-    decoder = None
+    encoder_shape = None
+    decoder_shape = None
     model = None
     fixed_vector_dim = 200
     embedding_dim = 128
@@ -26,51 +27,41 @@ class NewsSummarizationModel:
         with open(pickle_path, 'rb') as fi:
             (self.documents, self.documents_words, self.documents_words_reverse),\
             (self.summaries, self.summaries_words, self.summaries_words_reverse) = pickle.load(fi)
-        self.encoder = {
-            'n': len(self.documents[0]),
-            'm': len(self.documents),
-            'input': None,
-            'lstm': None,
-            'states': None
+        self.encoder_shape = {
+            'n': self.documents.shape[1],
+            'm': self.documents.shape[0],
         }
-        self.decoder = {
-            'n': len(self.summaries[0]),
-            'm': len(self.summaries),
-            'input': None,
-            'lstm': None,
-            'dense': None,
-            'out': None
+        self.decoder_shape = {
+            'n': self.summaries.shape[1],
+            'm': self.summaries.shape[0],
         }
         self.document_vocab_size = len(self.documents_words)
         self.summary_vocab_size = len(self.summaries_words)
 
-    def build_encoder(self):
-        # TODO: Add an Embedding layer after the Input layer
-        self.encoder['input'] = keras.layers.Input(shape=(None, self.encoder['n']))
-        self.encoder['lstm'] = keras.layers.LSTM(self.fixed_vector_dim, return_sequences=True, return_state=True)
-        enc_out, h, c = self.encoder['lstm'](self.encoder['input'])
-        self.encoder['states'] = [h, c]
-
-    def build_decoder(self):
-        # TODO: Add an Embedding layer after the Input layer
-        self.decoder['input'] = keras.layers.Input(shape=(None, self.decoder['n']))
-        self.decoder['lstm'] = keras.layers.LSTM(self.fixed_vector_dim, return_sequences=True, return_state=True)
-        dec_out, _, _ = self.decoder['lstm'](self.decoder['input'], initial_state=self.encoder['states'])
-        # dec_out, _, _ = self.decoder['lstm'](initial_state=self.encoder['states'])
-        self.decoder['dense'] = keras.layers.Dense(self.summary_vocab_size, activation='softmax')
-        self.decoder['out'] = self.decoder['dense'](dec_out)
-
     def build_model(self):
-        self.build_encoder()
-        self.build_decoder()
-        self.model = keras.Model([self.encoder['input'], self.decoder['input']], self.decoder['out'])
-        # self.model = keras.Model(self.encoder['input'], self.decoder['out'])
-        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
+        # build encoder
+        enc_in = keras.layers.Input(shape=(None,), name="Encoder_Input")
+        enc_embedding = keras.layers.Embedding(self.document_vocab_size, self.embedding_dim, name="Input_Embedding")(enc_in)
+        enc_lstm = keras.layers.LSTM(self.fixed_vector_dim, name="Encoder_LSTM", return_sequences=True, return_state=True)
+        enc_out, h, c = enc_lstm(enc_embedding)
+        enc_state = [h, c]
+
+        # build decoder
+        dec_in = keras.layers.Input(shape=(None,), name="Decoder_Input")
+        dec_embedding = keras.layers.Embedding(self.summary_vocab_size, self.embedding_dim, name="Decoder_Embedding")(dec_in)
+        dec_lstm = keras.layers.LSTM(self.fixed_vector_dim, name="Deocder_LSTM", return_sequences=True, return_state=True)
+        dec_lstm_out, _, _ = dec_lstm(dec_embedding, initial_state=enc_state)
+        dec_dense = keras.layers.Dense(self.decoder_shape['n'], name="Decoder_Dense", activation='softmax')
+        dec_out = dec_dense(dec_lstm_out)
+
+        # create model
+        self.model = keras.Model([enc_in, dec_in], dec_out)
+        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['acc'])
 
     def train(self):
         summary = np.array(self.summaries)
         decoder_input = summary[:, 1:]
-        self.model.fit([self.documents, decoder_input], self.summaries)
+        self.model.fit([self.documents, decoder_input], self.summaries, batch_size=1)
 
     def view_document_text(self):
         # TODO: translate a sequence of numerical document tokens to actual text
@@ -83,5 +74,7 @@ class NewsSummarizationModel:
 if __name__ == '__main__':
     model = NewsSummarizationModel()
     model.build_model()
-    print(model.model.summary())
+    # tf.keras.utils.plot_model(model.model, to_file='model.png', show_shapes=True, show_layer_names=True)
+    # model.model.summary()
+    print('training...')
     model.train()

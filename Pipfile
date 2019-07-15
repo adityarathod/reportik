@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pydot = "*"
 
 [packages]
 requests = "*"
@@ -11,7 +12,7 @@ selenium = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 newspaper3k = "*"
-tensorflow = "==2.0.0b1"
+tensorflow = "*"
 
 [requires]
 python_version = "3.7"
