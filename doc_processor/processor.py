@@ -5,9 +5,6 @@ import re
 import pickle
 import numpy as np
 
-# Data can also be downloaded from https://dl.bintray.com/applecrazy/Reportik-CNBC-Data/cnbc_data.pkl
-
-
 class DocumentCleaner:
     texts = None
     texts_dir = None
