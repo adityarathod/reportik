@@ -12,7 +12,8 @@ selenium = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 newspaper3k = "*"
-tensorflow = "*"
+tensorflow = "==2.0.0b1"
+fasttext = "*"
 
 [requires]
 python_version = "3.7"

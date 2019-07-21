@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "814bc9157a52d7b8cfcba0790351828a43a2205b2cfa0a3a31f2e5f5fcf12fce"
+            "sha256": "77e2e2df623432a4464833576c207f388fd795193963973522d22e4181f6286b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -58,6 +58,14 @@
                 "sha256:3b5103e8789da9e936a68d993b70df732d06b8bb9a337a05ed4eb52c17ef7206"
             ],
             "version": "==1.0.3"
+        },
+        "fasttext": {
+            "hashes": [
+                "sha256:6ead9c6aafe985472066e27c43e33f581b192befd136a84c3c2e8197e7e05be6",
+                "sha256:f79b3447b1612b9b1ad791d4be97db3fecb97762dba01e6fbec389d0d0874772"
+            ],
+            "index": "pypi",
+            "version": "==0.9.1"
         },
         "feedfinder2": {
             "hashes": [
@@ -317,6 +325,13 @@
             ],
             "version": "==3.9.0"
         },
+        "pybind11": {
+            "hashes": [
+                "sha256:199a915e0f81b5a593d1a13a18f137f59a6111f0049543211d936d26dab34324",
+                "sha256:5531dee811310ff02ff69fe4f45feb56d845154ba692b8e4660ae2c478ee313a"
+            ],
+            "version": "==2.3.0"
+        },
         "python-dateutil": {
             "hashes": [
                 "sha256:7e6584c74aeed623791615e26efd690f29817a27c73085b78e4bad02493df2fb",
@@ -439,10 +454,10 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:865856ebb55c4dcd0630cdd8f3331a1847a819dda7e8c750d3db6f2aa6c0209c",
-                "sha256:a0b915f0815982fb2a09161cb8f31708052d0951c3ba433ccc5e1aa276507ca6"
+                "sha256:87ae4e5b5366da2347eb3116c0e6c681a0e939a33b2805e2c0cbd282664932c4",
+                "sha256:a13b74dd3c45f758d4ebdb224be8f1ab8ef58b3c0ffc1783a8c7d9f4f50227e6"
             ],
-            "version": "==0.15.4"
+            "version": "==0.15.5"
         },
         "wheel": {
             "hashes": [

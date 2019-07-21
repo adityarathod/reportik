@@ -20,8 +20,11 @@ class DocumentCleaner:
     }
     texts_word_dict = None
     texts_rev_word_dict = None
+    text_vocab_size = None
     summaries_word_dict = None
     summaries_rev_word_dict = None
+    summaries_vocab_size = None
+    save_path = '../data/'
 
     def __init__(self, texts='../data/texts', summaries='../data/points', text_replacements=None):
         self.texts_dir = texts
@@ -55,12 +58,13 @@ class DocumentCleaner:
                 sentences = [self.clean_sentence(s.strip()) for s in sentences]
                 self.texts.append('<START> ' + ''.join(sentences) + '<EOS>')
 
-    def tokenize_texts(self):
+    def tokenize_texts(self, max_length=None, vocab_size=50000):
         print(f'Tokenizing texts...')
-        tokenizer = keras.preprocessing.text.Tokenizer(num_words=50000, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
+        self.text_vocab_size = vocab_size
+        tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
         tokenizer.fit_on_texts(self.texts)
         seq = tokenizer.texts_to_sequences(self.texts)
-        self.texts = keras.preprocessing.sequence.pad_sequences(seq)
+        self.texts = keras.preprocessing.sequence.pad_sequences(seq, maxlen=max_length, truncating='post')
         word_dict = tokenizer.word_index
         word_dict['<pad>'] = 0
         self.texts_word_dict = word_dict
@@ -71,14 +75,6 @@ class DocumentCleaner:
 
     def decode_summary_sequence(self, seq):
         return ' '.join([self.summaries_rev_word_dict.get(i, '?') for i in seq])
-
-    def dump_texts(self, save_path='../data'):
-        with open(f'{save_path}/texts_clean.pkl', 'wb') as of:
-            pickle.dump(self.texts, of)
-        with open(f'{save_path}/text_word_dict.pkl', 'wb') as of:
-            pickle.dump(self.texts_word_dict, of)
-        with open(f'{save_path}/text_word_dict_rev.pkl', 'wb') as of:
-            pickle.dump(self.texts_rev_word_dict, of)
 
     def clean_summaries(self):
         print(f'Processing {self.summaries_dir}/...')
@@ -95,42 +91,33 @@ class DocumentCleaner:
                 sentences = [self.clean_sentence(s.strip()) for s in sentences]
                 self.summaries.append('<START> ' + ''.join(sentences) + '<EOS>')
 
-    def tokenize_summaries(self):
+    def tokenize_summaries(self, max_length=None, vocab_size=27000):
         print(f'Tokenizing summaries...')
-        tokenizer = keras.preprocessing.text.Tokenizer(num_words=50000, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
+        self.summaries_vocab_size = vocab_size
+        tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
         tokenizer.fit_on_texts(self.summaries)
         seq = tokenizer.texts_to_sequences(self.summaries)
-        self.summaries = keras.preprocessing.sequence.pad_sequences(seq)
+        self.summaries = keras.preprocessing.sequence.pad_sequences(seq, maxlen=max_length, truncating='post')
         word_dict = tokenizer.word_index
         word_dict['<pad>'] = 0
         self.summaries_word_dict = word_dict
         self.summaries_rev_word_dict = dict([(value, key) for (key, value) in self.summaries_word_dict.items()])
 
-    def dump_data(self, save_path='../data'):
-        with open(f'{save_path}/cnbc_data.pkl', 'wb') as of:
+    def dump_data(self, filename='cnbc_data.pkl'):
+        with open(f'{self.save_path}/{filename}', 'wb') as of:
             pickle.dump(
                 (
-                    (self.texts, self.texts_word_dict, self.texts_rev_word_dict),
-                    (self.summaries, self.summaries_word_dict, self.summaries_rev_word_dict)
+                    (self.texts, self.texts_word_dict, self.texts_rev_word_dict, self.text_vocab_size),
+                    (self.summaries, self.summaries_word_dict, self.summaries_rev_word_dict, self.summaries_vocab_size)
                 ),
                 of
             )
 
-    def dump_summaries(self, save_path='../data'):
-        with open(f'{save_path}/summaries_clean.pkl', 'wb') as of:
-            pickle.dump(self.summaries, of)
-        with open(f'{save_path}/summaries_word_dict.pkl', 'wb') as of:
-            pickle.dump(self.summaries_word_dict, of)
-        with open(f'{save_path}/summaries_word_dict_rev.pkl', 'wb') as of:
-            pickle.dump(self.summaries_rev_word_dict, of)
-
-
 if __name__ == '__main__':
     cleaner = DocumentCleaner()
+    cleaner.save_path = '../data/pickles'
     cleaner.clean_texts()
-    cleaner.tokenize_texts()
-    # cleaner.dump_texts()
+    cleaner.tokenize_texts(max_length=1300)
     cleaner.clean_summaries()
-    cleaner.tokenize_summaries()
-    # cleaner.dump_summaries()
-    cleaner.dump_data()
+    cleaner.tokenize_summaries(max_length=150)
+    cleaner.dump_data(filename='cnbc_data_truncated_extreme.pkl')
