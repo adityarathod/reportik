@@ -21,7 +21,8 @@ class DocumentCleaner:
     summaries_word_dict = None
     summaries_rev_word_dict = None
     summaries_vocab_size = None
-    save_path = '../data/'
+    text_tokenizer = None
+    summary_tokenizer = None
 
     def __init__(self, texts='../data/texts', summaries='../data/points', text_replacements=None):
         self.texts_dir = texts
@@ -42,7 +43,7 @@ class DocumentCleaner:
         return out + ' <PUNCT> '
 
     def clean_texts(self):
-        print(f'Processing {self.texts_dir}/...')
+        print(f'Ingesting and cleaning documents in {self.texts_dir}/...', end='')
         for file in os.listdir(self.texts_dir):
             if self.is_hidden_file(file):
                 continue
@@ -54,9 +55,10 @@ class DocumentCleaner:
                 sentences = sent_tokenize(fixed_txt)
                 sentences = [self.clean_sentence(s.strip()) for s in sentences]
                 self.texts.append('<START> ' + ''.join(sentences) + '<EOS>')
+        print('done.')
 
-    def tokenize_texts(self, max_length=None, vocab_size=50000):
-        print(f'Tokenizing texts...')
+    def tokenize_texts(self, max_length=1300, vocab_size=50000):
+        print(f'Tokenizing documents...', end='')
         self.text_vocab_size = vocab_size
         tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
         tokenizer.fit_on_texts(self.texts)
@@ -66,15 +68,11 @@ class DocumentCleaner:
         word_dict['<pad>'] = 0
         self.texts_word_dict = word_dict
         self.texts_rev_word_dict = dict([(value, key) for (key, value) in self.texts_word_dict.items()])
-
-    def decode_text_sequence(self, seq):
-        return ' '.join([self.texts_rev_word_dict.get(i, '?') for i in seq])
-
-    def decode_summary_sequence(self, seq):
-        return ' '.join([self.summaries_rev_word_dict.get(i, '?') for i in seq])
+        self.text_tokenizer = tokenizer
+        print('done.')
 
     def clean_summaries(self):
-        print(f'Processing {self.summaries_dir}/...')
+        print(f'Ingesting and cleaning summaries in {self.summaries_dir}/...', end='')
         for file in os.listdir(self.summaries_dir):
             if self.is_hidden_file(file):
                 continue
@@ -87,9 +85,10 @@ class DocumentCleaner:
                 sentences = sent_tokenize(fixed_txt)
                 sentences = [self.clean_sentence(s.strip()) for s in sentences]
                 self.summaries.append('<START> ' + ''.join(sentences) + '<EOS>')
+        print('done.')
 
-    def tokenize_summaries(self, max_length=None, vocab_size=27000):
-        print(f'Tokenizing summaries...')
+    def tokenize_summaries(self, max_length=150, vocab_size=27000):
+        print(f'Tokenizing summaries...', end='')
         self.summaries_vocab_size = vocab_size
         tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
         tokenizer.fit_on_texts(self.summaries)
@@ -99,22 +98,22 @@ class DocumentCleaner:
         word_dict['<pad>'] = 0
         self.summaries_word_dict = word_dict
         self.summaries_rev_word_dict = dict([(value, key) for (key, value) in self.summaries_word_dict.items()])
+        self.summary_tokenizer = tokenizer
+        print('done.')
 
-    def dump_data(self, filename='cnbc_data.pkl'):
-        with open(f'{self.save_path}/{filename}', 'wb') as of:
-            pickle.dump(
-                (
-                    (self.texts, self.texts_word_dict, self.texts_rev_word_dict, self.text_vocab_size),
-                    (self.summaries, self.summaries_word_dict, self.summaries_rev_word_dict, self.summaries_vocab_size)
-                ),
-                of
-            )
+    def process(self):
+        self.clean_texts()
+        self.tokenize_texts()
+        self.clean_summaries()
+        self.tokenize_summaries()
+
+    def dump_data(self, save_dir='../data', data_filename='cnbc_data.pkl', tokenizer_filename='cnbc_tokenizers.pkl'):
+        with open(os.path.join(save_dir, data_filename), 'wb') as of:
+            pickle.dump((self.texts, self.summaries), of)
+        with open(os.path.join(save_dir, tokenizer_filename), 'wb') as of2:
+            pickle.dump((self.text_tokenizer, self.summary_tokenizer), of2)
 
 if __name__ == '__main__':
-    cleaner = DocumentCleaner()
-    cleaner.save_path = '../data/pickles'
-    cleaner.clean_texts()
-    cleaner.tokenize_texts(max_length=1300)
-    cleaner.clean_summaries()
-    cleaner.tokenize_summaries(max_length=150)
-    cleaner.dump_data(filename='cnbc_data_truncated_extreme.pkl')
+    cleaner = DocumentCleaner(texts='../data/old/texts', summaries='../data/old/points')
+    cleaner.process()
+    cleaner.dump_data()

@@ -1,7 +1,7 @@
 from tensorflow import keras
 import tensorflow as tf
 import numpy as np
-from datamanager.dataman import DataManager
+from loader.dataman import DataManager
 
 
 class NewsSummarizationModel:
