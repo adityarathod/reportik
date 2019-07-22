@@ -1,52 +1,51 @@
 from tensorflow import keras
 import tensorflow as tf
-import numpy as np
-from datamanager.dataman import DataManager
+from loader.dataman import DataManager
 
 
 class NewsSummarizationModel:
-    data = None
-    encoder_shape = None
-    decoder_shape = None
     model = None
-    fixed_vector_dim = 200
-    embedding_dim = 128
+    embedding_dim = None
+    batch_size = None
+    data = None
 
-    def __init__(self, manager: DataManager):
+    def __init__(self, manager: DataManager, embedding_dim=100, batch_size=32):
         self.data = manager
-        self.encoder_shape = {
-            'n': self.data.documents.shape[1],
-            'm': self.data.documents.shape[0],
-        }
-        self.decoder_shape = {
-            'n': self.data.summaries.shape[1],
-            'm': self.data.summaries.shape[0],
-        }
+        self.embedding_dim = embedding_dim
+        self.batch_size = batch_size
 
     def build_model(self):
-        # build encoder
-        enc_in = keras.layers.Input(shape=(None,), name="Encoder_Input")
-        enc_embedding = keras.layers.Embedding(self.data.document_vocab_size, self.embedding_dim, name="Input_Embedding")(enc_in)
-        enc_lstm = keras.layers.LSTM(self.fixed_vector_dim, name="Encoder_LSTM", return_sequences=True, return_state=True)
-        enc_out, h, c = enc_lstm(enc_embedding)
-        enc_state = [h, c]
+        encoder_inputs = keras.layers.Input(shape=(None,))
+        en_x = keras.layers.Embedding(self.data.document_tokenizer.num_words, self.embedding_dim)(encoder_inputs)
+        encoder = keras.layers.LSTM(4, return_state=True)
+        encoder_outputs, state_h, state_c = encoder(en_x)
+        encoder_states = [state_h, state_c]
 
-        # build decoder
-        dec_in = keras.layers.Input(shape=(None,), name="Decoder_Input")
-        dec_embedding = keras.layers.Embedding(self.data.summary_vocab_size, self.embedding_dim, name="Decoder_Embedding")(dec_in)
-        dec_lstm = keras.layers.LSTM(self.fixed_vector_dim, name="Decoder_LSTM", return_sequences=True, return_state=True)
-        dec_lstm_out, _, _ = dec_lstm(dec_in, initial_state=enc_state)
-        dec_dense = keras.layers.Dense(self.decoder_shape['n'], name="Decoder_Dense", activation='softmax')
-        dec_out = dec_dense(dec_lstm_out)
-
-        # create model
-        self.model = keras.Model([enc_in, dec_in], dec_out)
+        decoder_inputs = keras.layers.Input(shape=(None,))
+        dex = keras.layers.Embedding(self.data.summary_tokenizer.num_words, self.embedding_dim)
+        final_dex = dex(decoder_inputs)
+        decoder_lstm = keras.layers.LSTM(4, return_sequences=True, return_state=True)
+        decoder_outputs, _, _ = decoder_lstm(final_dex,
+                                             initial_state=encoder_states)
+        decoder_dense = keras.layers.Dense(data.summary_tokenizer.num_words, activation='softmax')
+        decoder_outputs = decoder_dense(decoder_outputs)
+        self.model = keras.Model([encoder_inputs, decoder_inputs], decoder_outputs)
         self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['acc'])
 
     def train(self):
-        summary = np.array(self.data.summaries)
-        decoder_input = summary[:, 1:]
-        self.model.fit([self.data.documents, decoder_input], self.data.summaries)
+        cb = keras.callbacks.TensorBoard()
+        self.model.fit_generator(
+            data.training_generator(self.batch_size),
+            epochs=5,
+            steps_per_epoch=len(data.documents) // self.batch_size,
+            callbacks=[cb]
+        )
+
+    def plot_model(self, image_path='model.png'):
+        tf.keras.utils.plot_model(self.model, to_file=image_path, show_shapes=True, show_layer_names=True)
+
+    def save(self, path):
+        self.model.save(path)
 
     def view_document_text(self):
         # TODO: translate a sequence of numerical document tokens to actual text
@@ -60,8 +59,7 @@ if __name__ == '__main__':
     data = DataManager()
     model = NewsSummarizationModel(data)
     model.build_model()
-    # tf.keras.utils.plot_model(model.model, to_file='model.png', show_shapes=True, show_layer_names=True)
     model.model.summary()
+    model.plot_model()
     print('training...')
     model.train()
-    # model.model.save('model.h5')

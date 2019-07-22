@@ -14,6 +14,7 @@ lxml = "*"
 newspaper3k = "*"
 tensorflow = "==2.0.0b1"
 fasttext = "*"
+tensorflow-datasets = "*"
 
 [requires]
 python_version = "3.7"
