@@ -27,7 +27,7 @@ class NewsSummarizationModel:
         decoder_lstm = keras.layers.LSTM(4, return_sequences=True, return_state=True)
         decoder_outputs, _, _ = decoder_lstm(final_dex,
                                              initial_state=encoder_states)
-        decoder_dense = keras.layers.Dense(data.summary_tokenizer.num_words, activation='softmax')
+        decoder_dense = keras.layers.Dense(self.data.summary_tokenizer.num_words, activation='softmax')
         decoder_outputs = decoder_dense(decoder_outputs)
         self.model = keras.Model([encoder_inputs, decoder_inputs], decoder_outputs)
         self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['acc'])
@@ -35,11 +35,11 @@ class NewsSummarizationModel:
     def train(self, epochs=1):
         cb = keras.callbacks.TensorBoard()
         self.model.fit_generator(
-            data.training_generator(self.batch_size),
+            self.data.training_generator(self.batch_size),
             epochs=epochs,
-            steps_per_epoch=len(data.train_documents) // self.batch_size,
-            validation_data=data.val_generator(self.batch_size),
-            validation_steps=len(data.val_documents) // self.batch_size,
+            steps_per_epoch=len(self.data.train_documents) // self.batch_size,
+            validation_data=self.data.val_generator(self.batch_size),
+            validation_steps=len(self.data.val_documents) // self.batch_size,
             callbacks=[cb]
         )
 
@@ -48,8 +48,8 @@ class NewsSummarizationModel:
 
     def evaluate(self):
         return self.model.evaluate_generator(
-            data.test_generator(self.batch_size),
-            steps=len(data.test_documents) // self.batch_size
+            self.data.test_generator(self.batch_size),
+            steps=len(self.data.test_documents) // self.batch_size
         )
 
     def save(self, path):
