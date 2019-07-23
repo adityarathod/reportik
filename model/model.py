@@ -37,7 +37,7 @@ class NewsSummarizationModel:
         self.model.fit_generator(
             data.training_generator(self.batch_size),
             epochs=5,
-            steps_per_epoch=len(data.documents) // self.batch_size,
+            steps_per_epoch=len(data.train_documents) // self.batch_size,
             callbacks=[cb]
         )
 

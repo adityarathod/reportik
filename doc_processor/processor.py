@@ -1,5 +1,6 @@
 from tensorflow import keras
 from nltk.tokenize import sent_tokenize
+from sklearn.model_selection import train_test_split
 import os
 import re
 import pickle
@@ -107,13 +108,16 @@ class DocumentCleaner:
         self.clean_summaries()
         self.tokenize_summaries()
 
-    def dump_data(self, save_dir='../data', data_filename='cnbc_data.pkl', tokenizer_filename='cnbc_tokenizers.pkl'):
-        with open(os.path.join(save_dir, data_filename), 'wb') as of:
-            pickle.dump((self.texts, self.summaries), of)
+    def split_and_dump_data(self, save_dir='../data', data_filename='cnbc_data.pkl', tokenizer_filename='cnbc_tokenizers.pkl'):
+        texts_train, summ_train, texts_test, summ_test = train_test_split(self.texts, self.summaries, train_size=0.7, random_state=42)
+        with open(os.path.join(save_dir, 'train_' + data_filename), 'wb') as of:
+            pickle.dump((texts_train, summ_train), of)
+        with open(os.path.join(save_dir, 'test_' + data_filename), 'wb') as of:
+            pickle.dump((texts_test, summ_test), of)
         with open(os.path.join(save_dir, tokenizer_filename), 'wb') as of2:
             pickle.dump((self.text_tokenizer, self.summary_tokenizer), of2)
 
 if __name__ == '__main__':
-    cleaner = DocumentCleaner(texts='../data/old/texts', summaries='../data/old/points')
+    cleaner = DocumentCleaner(texts='../data/documents', summaries='../data/summaries')
     cleaner.process()
-    cleaner.dump_data()
+    cleaner.split_and_dump_data()
