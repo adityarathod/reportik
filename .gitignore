@@ -136,3 +136,6 @@ dmypy.json
 
 # IntelliJ crap
 .idea/
+
+# model logs
+model/logs
