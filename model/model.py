@@ -1,6 +1,6 @@
 from tensorflow import keras
 import tensorflow as tf
-from loader.dataman import DataManager
+from loader import DataManager
 
 
 class NewsSummarizationModel:
@@ -32,28 +32,42 @@ class NewsSummarizationModel:
         self.model = keras.Model([encoder_inputs, decoder_inputs], decoder_outputs)
         self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['acc'])
 
-    def train(self):
+    def train(self, epochs=1):
         cb = keras.callbacks.TensorBoard()
         self.model.fit_generator(
             data.training_generator(self.batch_size),
-            epochs=5,
+            epochs=epochs,
             steps_per_epoch=len(data.train_documents) // self.batch_size,
+            validation_data=data.val_generator(self.batch_size),
+            validation_steps=len(data.val_documents) // self.batch_size,
             callbacks=[cb]
         )
 
     def plot_model(self, image_path='model.png'):
         tf.keras.utils.plot_model(self.model, to_file=image_path, show_shapes=True, show_layer_names=True)
 
+    def evaluate(self):
+        return self.model.evaluate_generator(
+            data.test_generator(self.batch_size),
+            steps=len(data.test_documents) // self.batch_size
+        )
+
     def save(self, path):
         self.model.save(path)
 
-    def view_document_text(self):
-        # TODO: translate a sequence of numerical document tokens to actual text
-        pass
+    def view_document_text(self, document):
+        return self.data.document_tokenizer.sequences_to_texts([document])[0]
 
-    def view_summary_text(self):
-        # TODO: translate a sequence of numerical summary tokens to actual text
-        pass
+    def view_summary_text(self, summary):
+        return self.data.summary_tokenizer.sequences_to_texts([summary])[0]
+
+    def load_model(self, path):
+        self.model = keras.models.load_model(path)
+
+    def infer(self, document_text):
+        doc_seq = self.data.document_tokenizer.texts_to_sequences([document_text])
+        summ_seq = self.model.predict(doc_seq)
+        return self.view_summary_text(summ_seq)
 
 if __name__ == '__main__':
     data = DataManager()
