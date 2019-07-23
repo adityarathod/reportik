@@ -109,7 +109,7 @@ class DocumentCleaner:
         self.tokenize_summaries()
 
     def split_and_dump_data(self, save_dir='../data', data_filename='cnbc_data.pkl', tokenizer_filename='cnbc_tokenizers.pkl'):
-        texts_train, summ_train, texts_test, summ_test = train_test_split(self.texts, self.summaries, train_size=0.7, random_state=42)
+        texts_train, texts_test, summ_train, summ_test = train_test_split(self.texts, self.summaries, test_size=0.2, random_state=42)
         with open(os.path.join(save_dir, 'train_' + data_filename), 'wb') as of:
             pickle.dump((texts_train, summ_train), of)
         with open(os.path.join(save_dir, 'test_' + data_filename), 'wb') as of:

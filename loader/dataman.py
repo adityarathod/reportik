@@ -29,7 +29,7 @@ class DataManager:
         print('Loading', data_pickle_path, '...', end='')
         with open(data_pickle_path, 'rb') as f:
             td, ts = pickle.load(f)
-            split_idx = self.calc_val_idx()
+            split_idx = self.calc_val_idx(len(td), len(ts))
             self.val_documents = td[:split_idx]
             self.val_summaries = ts[:split_idx]
             self.train_documents = td[split_idx:]
@@ -50,8 +50,8 @@ class DataManager:
             (self.document_tokenizer, self.summary_tokenizer) = pickle.load(f)
         print('done.')
 
-    def calc_val_idx(self):
-        total = len(self.train_documents) + len(self.test_documents)
+    def calc_val_idx(self, train_len, test_len):
+        total = train_len + test_len
         return floor(total * self.val_split)
 
     def training_generator(self, batch_size=32):
