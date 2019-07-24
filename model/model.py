@@ -1,10 +1,14 @@
 from tensorflow import keras
-import tensorflow as tf
 from loader import DataManager
+import tensorflow as tf
+import numpy as np
+import os
 
 
 class NewsSummarizationModel:
     model = None
+    encoder_model = None
+    decoder_model = None
     embedding_dim = None
     batch_size = None
     data = None
@@ -15,22 +19,31 @@ class NewsSummarizationModel:
         self.batch_size = batch_size
 
     def build_model(self):
-        encoder_inputs = keras.layers.Input(shape=(None,))
-        en_x = keras.layers.Embedding(self.data.document_tokenizer.num_words, self.embedding_dim)(encoder_inputs)
-        encoder = keras.layers.LSTM(4, return_state=True)
-        encoder_outputs, state_h, state_c = encoder(en_x)
-        encoder_states = [state_h, state_c]
+        latent_dim = 64
+        encoder_inputs = keras.Input(shape=(None,), name='encoder_inputs')
+        encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words, output_dim=latent_dim,
+                                      input_length=len(self.data.train_documents[0]), name='encoder_embedding')
+        encoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, name='encoder_lstm')
+        encoder_outputs, encoder_state_h, encoder_state_c = encoder_lstm(encoder_embedding(encoder_inputs))
+        encoder_states = [encoder_state_h, encoder_state_c]
 
-        decoder_inputs = keras.layers.Input(shape=(None,))
-        dex = keras.layers.Embedding(self.data.summary_tokenizer.num_words, self.embedding_dim)
-        final_dex = dex(decoder_inputs)
-        decoder_lstm = keras.layers.LSTM(4, return_sequences=True, return_state=True)
-        decoder_outputs, _, _ = decoder_lstm(final_dex,
-                                             initial_state=encoder_states)
-        decoder_dense = keras.layers.Dense(self.data.summary_tokenizer.num_words, activation='softmax')
+        decoder_inputs = keras.Input(shape=(None, self.data.summary_tokenizer.num_words), name='decoder_inputs')
+        decoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, return_sequences=True, name='decoder_lstm')
+        decoder_outputs, decoder_state_h, decoder_state_c = decoder_lstm(decoder_inputs, initial_state=encoder_states)
+        decoder_dense = keras.layers.Dense(units=self.data.summary_tokenizer.num_words, activation='softmax', name='decoder_dense')
         decoder_outputs = decoder_dense(decoder_outputs)
+
         self.model = keras.Model([encoder_inputs, decoder_inputs], decoder_outputs)
-        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['acc'])
+
+        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
+        self.encoder_model = keras.Model(encoder_inputs, encoder_states)
+
+        decoder_state_inputs = [keras.Input(shape=(latent_dim,)), keras.Input(shape=(latent_dim,))]
+        decoder_outputs, state_h, state_c = decoder_lstm(decoder_inputs, initial_state=decoder_state_inputs)
+        decoder_states = [state_h, state_c]
+        decoder_outputs = decoder_dense(decoder_outputs)
+        self.decoder_model = keras.Model([decoder_inputs] + decoder_state_inputs, [decoder_outputs] + decoder_states)
 
     def train(self, epochs=1):
         cb = keras.callbacks.TensorBoard()
@@ -52,8 +65,10 @@ class NewsSummarizationModel:
             steps=len(self.data.test_documents) // self.batch_size
         )
 
-    def save(self, path):
-        self.model.save(path)
+    def save(self, path, filename='model'):
+        self.model.save(os.path.join(path, filename + '-overall.h5'))
+        self.encoder_model.save(os.path.join(path, filename + '-encoder.h5'))
+        self.decoder_model.save(os.path.join(path, filename + '-decoder.h5'))
 
     def view_document_text(self, document):
         return self.data.document_tokenizer.sequences_to_texts([document])[0]
@@ -61,12 +76,40 @@ class NewsSummarizationModel:
     def view_summary_text(self, summary):
         return self.data.summary_tokenizer.sequences_to_texts([summary])[0]
 
-    def load_model(self, path):
-        self.model = keras.models.load_model(path)
+    def load(self, overall_model_path, encoder_path, decoder_path):
+        self.model = keras.models.load_model(overall_model_path)
+        self.encoder_model = keras.models.load_model(encoder_path)
+        self.decoder_model = keras.models.load_model(decoder_path)
+
+    def _gl(self, name):
+        return self.model.get_layer(name)
 
     def infer(self, document_text):
         doc_seq = self.data.document_tokenizer.texts_to_sequences([document_text])
-        summ_seq = self.model.predict(doc_seq)
+
+        max_seq_len = len(self.data.train_summaries[0])
+
+        tar_seq = np.zeros((1, 1, max_seq_len))
+        tar_seq[0, 0, self.data.summary_tokenizer.word_index['<start>']] = 1.
+
+        states_value = self.encoder_model.predict(doc_seq)
+
+        stop = False
+        summ_seq = []
+
+        while not stop:
+            out_tok, h, c = self.decoder_model.predict([tar_seq] + states_value)
+            s_tok_idx = np.argmax(out_tok[0, -1, :])
+            summ_seq.append(s_tok_idx)
+
+            if data.summary_tokenizer.index_word[s_tok_idx] == '<eos>' or len(summ_seq) > max_seq_len:
+                stop = True
+
+            target_seq = np.zeros((1, 1, max_seq_len))
+            target_seq[0, 0, s_tok_idx] = 1.
+
+            states_value = [h, c]
+
         return self.view_summary_text(summ_seq)
 
 if __name__ == '__main__':
