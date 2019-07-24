@@ -112,6 +112,7 @@ class NewsSummarizationModel:
 
         return self.view_summary_text(summ_seq)
 
+
 if __name__ == '__main__':
     data = DataManager()
     model = NewsSummarizationModel(data)
