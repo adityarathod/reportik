@@ -61,8 +61,7 @@ class DataManager:
                 (batch_size, len(self.train_documents[0])),
                 dtype='int32')
             decoder_in = np.zeros(
-                (batch_size, len(self.train_summaries[0])),
-                dtype='int32')
+                (batch_size, len(self.train_summaries[0]), self.summary_tokenizer.num_words), dtype='int32')
             decoder_target = np.zeros(
                 (batch_size, len(self.train_summaries[0]), self.summary_tokenizer.num_words), dtype='int32')
             for i, (input_text, target_text) in enumerate(
@@ -70,7 +69,7 @@ class DataManager:
                 for t, word in enumerate(input_text):
                     encoder_in[i, t] = word
                 for t, word in enumerate(target_text):
-                    decoder_in[i, t] = word
+                    decoder_in[i, t, word] = 1.
                     if t > 0:
                         decoder_target[i, t - 1, word] = 1.
             cur_i += batch_size
@@ -83,7 +82,7 @@ class DataManager:
                 (batch_size, len(self.test_documents[0])),
                 dtype='int32')
             decoder_in = np.zeros(
-                (batch_size, len(self.test_summaries[0])),
+                (batch_size, len(self.test_summaries[0]), self.summary_tokenizer.num_words),
                 dtype='int32')
             decoder_target = np.zeros(
                 (batch_size, len(self.test_summaries[0]), self.summary_tokenizer.num_words), dtype='int32')
@@ -93,7 +92,7 @@ class DataManager:
                 for t, word in enumerate(input_text):
                     encoder_in[i, t] = word
                 for t, word in enumerate(target_text):
-                    decoder_in[i, t] = word
+                    decoder_in[i, t, word] = 1.
                     if t > 0:
                         decoder_target[i, t - 1, word] = 1.
             cur_i += batch_size
@@ -106,7 +105,7 @@ class DataManager:
                 (batch_size, len(self.val_documents[0])),
                 dtype='int32')
             decoder_in = np.zeros(
-                (batch_size, len(self.val_summaries[0])),
+                (batch_size, len(self.val_summaries[0]), self.summary_tokenizer.num_words),
                 dtype='int32')
             decoder_target = np.zeros(
                 (batch_size, len(self.val_summaries[0]), self.summary_tokenizer.num_words), dtype='int32')
@@ -116,7 +115,7 @@ class DataManager:
                 for t, word in enumerate(input_text):
                     encoder_in[i, t] = word
                 for t, word in enumerate(target_text):
-                    decoder_in[i, t] = word
+                    decoder_in[i, t, word] = 1.
                     if t > 0:
                         decoder_target[i, t - 1, word] = 1.
             cur_i += batch_size

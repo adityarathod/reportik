@@ -21,16 +21,20 @@ class NewsSummarizationModel:
     def build_model(self):
         latent_dim = 64
         encoder_inputs = keras.Input(shape=(None,), name='encoder_inputs')
-        encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words, output_dim=latent_dim,
-                                      input_length=len(self.data.train_documents[0]), name='encoder_embedding')
+        encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words,
+                                                   output_dim=latent_dim,
+                                                   input_length=len(self.data.train_documents[0]),
+                                                   name='encoder_embedding')
         encoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, name='encoder_lstm')
         encoder_outputs, encoder_state_h, encoder_state_c = encoder_lstm(encoder_embedding(encoder_inputs))
         encoder_states = [encoder_state_h, encoder_state_c]
 
         decoder_inputs = keras.Input(shape=(None, self.data.summary_tokenizer.num_words), name='decoder_inputs')
-        decoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, return_sequences=True, name='decoder_lstm')
+        decoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, return_sequences=True,
+                                         name='decoder_lstm')
         decoder_outputs, decoder_state_h, decoder_state_c = decoder_lstm(decoder_inputs, initial_state=encoder_states)
-        decoder_dense = keras.layers.Dense(units=self.data.summary_tokenizer.num_words, activation='softmax', name='decoder_dense')
+        decoder_dense = keras.layers.Dense(units=self.data.summary_tokenizer.num_words, activation='softmax',
+                                           name='decoder_dense')
         decoder_outputs = decoder_dense(decoder_outputs)
 
         self.model = keras.Model([encoder_inputs, decoder_inputs], decoder_outputs)
