@@ -19,7 +19,7 @@ class NewsSummarizationModel:
         self.batch_size = batch_size
 
     def build_model(self):
-        latent_dim = 64
+        latent_dim = 32
         encoder_inputs = keras.Input(shape=(None,), name='encoder_inputs')
         encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words,
                                                    output_dim=latent_dim,
@@ -81,19 +81,21 @@ class NewsSummarizationModel:
         return self.data.summary_tokenizer.sequences_to_texts([summary])[0]
 
     def load(self, overall_model_path, encoder_path, decoder_path):
+        print('Loading saved models...')
         self.model = keras.models.load_model(overall_model_path)
-        self.encoder_model = keras.models.load_model(encoder_path)
-        self.decoder_model = keras.models.load_model(decoder_path)
+        self.encoder_model = keras.models.load_model(encoder_path, compile=False)
+        self.decoder_model = keras.models.load_model(decoder_path, compile=False)
 
     def _gl(self, name):
         return self.model.get_layer(name)
 
     def infer(self, document_text):
-        doc_seq = self.data.document_tokenizer.texts_to_sequences([document_text])
-
         max_seq_len = len(self.data.train_summaries[0])
 
-        tar_seq = np.zeros((1, 1, max_seq_len))
+        doc_seq = self.data.document_tokenizer.texts_to_sequences([document_text])
+        doc_seq = keras.preprocessing.sequence.pad_sequences(doc_seq, max_seq_len, truncating='post')
+
+        tar_seq = np.zeros((1, 1, self.data.summary_tokenizer.num_words))
         tar_seq[0, 0, self.data.summary_tokenizer.word_index['<start>']] = 1.
 
         states_value = self.encoder_model.predict(doc_seq)
@@ -106,10 +108,11 @@ class NewsSummarizationModel:
             s_tok_idx = np.argmax(out_tok[0, -1, :])
             summ_seq.append(s_tok_idx)
 
-            if data.summary_tokenizer.index_word[s_tok_idx] == '<eos>' or len(summ_seq) > max_seq_len:
-                stop = True
+            if s_tok_idx != 0:
+                if self.data.summary_tokenizer.index_word[s_tok_idx] == '<eos>' or len(summ_seq) >= max_seq_len:
+                    stop = True
 
-            target_seq = np.zeros((1, 1, max_seq_len))
+            target_seq = np.zeros((1, 1, self.data.summary_tokenizer.num_words))
             target_seq[0, 0, s_tok_idx] = 1.
 
             states_value = [h, c]
