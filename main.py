@@ -10,7 +10,7 @@ def main():
     # model.model.summary()
     # model.plot_model()
     print('training...')
-    model.train()
+    model.train(epochs=2)
     model.save(os.getcwd(), 'cnbc')
     # model.load('./trained_model/cnbc-overall.h5', './trained_model/cnbc-encoder.h5', './trained_model/cnbc-decoder.h5')
     print(model.evaluate())
