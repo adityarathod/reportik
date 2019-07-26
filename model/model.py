@@ -19,16 +19,20 @@ class NewsSummarizationModel:
         self.batch_size = batch_size
 
     def build_model(self):
-        latent_dim = 32
-        embedding_dim = 300
+        latent_dim = 64
+        embedding_dim = 200
         encoder_inputs = keras.Input(shape=(None,), name='encoder_inputs')
         encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words,
                                                    output_dim=embedding_dim,
                                                    input_length=len(self.data.train_documents[0]),
                                                    name='encoder_embedding')
-        encoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, name='encoder_lstm')
-        encoder_outputs, encoder_state_h, encoder_state_c = encoder_lstm(encoder_embedding(encoder_inputs))
-        encoder_states = [encoder_state_h, encoder_state_c]
+        encoder_lstm = keras.layers.Bidirectional(keras.layers.LSTM(units=latent_dim, return_state=True, name='encoder_lstm'))
+        encoder_outputs, encoder_state_h_fw, encoder_state_c_fw, encoder_state_h_bw, encoder_state_c_bw = encoder_lstm(
+            encoder_embedding(encoder_inputs)
+        )
+        enc_h = keras.layers.Concatenate()([encoder_state_h_fw, encoder_state_h_bw])
+        enc_c = keras.layers.Concatenate()([encoder_state_c_fw, encoder_state_c_bw])
+        encoder_states = [enc_h, enc_c]
 
         decoder_inputs = keras.Input(shape=(None, self.data.summary_tokenizer.num_words), name='decoder_inputs')
         decoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, return_sequences=True,
