@@ -8,14 +8,14 @@ example_text = '''Shares of Google parent company Alphabet rose more than 9% aft
 def main():
     manager = DataManager(saved_dir='./data')
     model = NewsSummarizationModel(manager)
-    # model.build_model()
-    # model.model.summary()
+    model.build_model()
+    model.model.summary()
     # model.plot_model()
-    # print('training...')
-    # model.train(epochs=2)
-    # model.save(os.getcwd(), 'cnbc')
-    model.load('./trained_model/cnbc-overall.h5', './trained_model/cnbc-encoder.h5', './trained_model/cnbc-decoder.h5')
-    # print(model.evaluate())
+    print('training...')
+    model.train(epochs=2)
+    model.save(os.getcwd(), 'cnbc')
+    # model.load('./trained_model/cnbc-overall.h5', './trained_model/cnbc-encoder.h5', './trained_model/cnbc-decoder.h5')
+    print(model.evaluate())
     print(model.infer(example_text))
 
 if __name__ == '__main__':
