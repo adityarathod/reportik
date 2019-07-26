@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7787c89c-4786-40b1-a784-c8bdef5506eb" name="Default Changelist" comment="Add code for inference, reduce latent dimension">
+    <list default="true" id="7787c89c-4786-40b1-a784-c8bdef5506eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/model.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,8 +42,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="324">
-                  <caret line="18" column="34" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+                <state relative-caret-position="72">
+                  <caret line="4" column="4853" selection-start-line="4" selection-start-column="4853" selection-end-line="4" selection-end-column="4853" />
                   <folding>
                     <element signature="e#0#30#0" expanded="true" />
                   </folding>
@@ -59,8 +58,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/model/model.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="252">
-                  <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
+                <state relative-caret-position="736">
+                  <caret line="49" selection-start-line="49" selection-end-line="50" />
                   <folding>
                     <element signature="e#0#28#0" expanded="true" />
                   </folding>
@@ -136,8 +135,8 @@
         <option value="$PROJECT_DIR$/download_data.sh" />
         <option value="$PROJECT_DIR$/download_data.py" />
         <option value="$PROJECT_DIR$/loader/dataman.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/model/model.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -377,7 +376,7 @@
       <workItem from="1563910726771" duration="7313000" />
       <workItem from="1563995507919" duration="7103000" />
       <workItem from="1564022801949" duration="3441000" />
-      <workItem from="1564102102252" duration="165000" />
+      <workItem from="1564102102252" duration="352000" />
     </task>
     <task id="LOCAL-00001" summary="Add multithreaded scraper">
       <created>1562708266585</created>
@@ -477,11 +476,25 @@
       <option name="project" value="LOCAL" />
       <updated>1564088785799</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Improve model code">
+      <created>1564102391231</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1564102391231</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Improve model code">
+      <created>1564102540350</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1564102540350</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="115330000" />
+    <option name="totallyTimeSpent" value="115517000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -565,7 +578,8 @@
     <MESSAGE value="Add training scaffolding" />
     <MESSAGE value="Fix training batching" />
     <MESSAGE value="Add code for inference, reduce latent dimension" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add code for inference, reduce latent dimension" />
+    <MESSAGE value="Improve model code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Improve model code" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/reportik$processor.coverage" NAME="processor Coverage Results" MODIFIED="1563909624810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/doc_processor" />
@@ -773,22 +787,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/model/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="34" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+        <state relative-caret-position="1404">
+          <caret line="82" column="16" selection-start-line="82" selection-start-column="16" selection-end-line="82" selection-end-column="16" />
           <folding>
-            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/model.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
+        <state relative-caret-position="72">
+          <caret line="4" column="4853" selection-start-line="4" selection-start-column="4853" selection-end-line="4" selection-end-column="4853" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
