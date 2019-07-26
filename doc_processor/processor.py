@@ -67,6 +67,7 @@ class DocumentCleaner:
         self.texts = keras.preprocessing.sequence.pad_sequences(seq, maxlen=max_length, truncating='post')
         word_dict = tokenizer.word_index
         word_dict['<pad>'] = 0
+        tokenizer.index_word[0] = '<pad>'
         self.texts_word_dict = word_dict
         self.texts_rev_word_dict = dict([(value, key) for (key, value) in self.texts_word_dict.items()])
         self.text_tokenizer = tokenizer

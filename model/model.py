@@ -97,7 +97,7 @@ class NewsSummarizationModel:
     def infer(self, document_text):
         max_seq_len = len(self.data.train_summaries[0])
 
-        doc_seq = self.data.document_tokenizer.texts_to_sequences([document_text])
+        doc_seq = self.data.document_tokenizer.texts_to_sequences([document_text + ' <EOS>'])
         doc_seq = keras.preprocessing.sequence.pad_sequences(doc_seq, max_seq_len, truncating='post')
 
         tar_seq = np.zeros((1, 1, self.data.summary_tokenizer.num_words))
@@ -115,6 +115,9 @@ class NewsSummarizationModel:
 
             if s_tok_idx != 0:
                 if self.data.summary_tokenizer.index_word[s_tok_idx] == '<eos>' or len(summ_seq) >= max_seq_len:
+                    stop = True
+            else:
+                if len(summ_seq) >= max_seq_len:
                     stop = True
 
             target_seq = np.zeros((1, 1, self.data.summary_tokenizer.num_words))
