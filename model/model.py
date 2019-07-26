@@ -40,7 +40,11 @@ class NewsSummarizationModel:
 
         self.model = keras.Model([encoder_inputs, decoder_inputs], decoder_outputs)
 
-        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+        self.model.compile(
+            loss='categorical_crossentropy',
+            optimizer=keras.optimizers.RMSprop(lr=1e-4),
+            metrics=['acc']
+        )
 
         self.encoder_model = keras.Model(encoder_inputs, encoder_states)
 
