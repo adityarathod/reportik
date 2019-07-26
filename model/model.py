@@ -19,10 +19,11 @@ class NewsSummarizationModel:
         self.batch_size = batch_size
 
     def build_model(self):
-        latent_dim = 180
+        latent_dim = 100
+        embedding_dim = 300
         encoder_inputs = keras.Input(shape=(None,), name='encoder_inputs')
         encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words,
-                                                   output_dim=latent_dim,
+                                                   output_dim=embedding_dim,
                                                    input_length=len(self.data.train_documents[0]),
                                                    name='encoder_embedding')
         encoder_lstm = keras.layers.LSTM(units=latent_dim, return_state=True, name='encoder_lstm')
