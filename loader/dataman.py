@@ -1,9 +1,10 @@
-from tensorflow import keras
-from math import floor
-import numpy as np
 import os
 import pickle
+from math import floor
+
 import fasttext as ft
+import numpy as np
+from tensorflow import keras
 
 
 class DataManager:

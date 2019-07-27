@@ -1,6 +1,7 @@
-import utils
-import fasttext
 import os
+
+import fasttext
+
 import utils
 
 
@@ -31,6 +32,7 @@ def learn_embeddings(texts_dir='../data/documents', summaries_dir='../data/summa
     model = fasttext.train_unsupervised('./tmp-summ-emb.txt')
     model.save_model('summ_emb.bin')
     print('Done.')
+
 
 if __name__ == '__main__':
     learn_embeddings()

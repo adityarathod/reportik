@@ -1,10 +1,12 @@
-from tensorflow import keras
-from nltk.tokenize import sent_tokenize
-from loader import DataManager
-import tensorflow as tf
-import numpy as np
 import os
 import re
+
+import numpy as np
+import tensorflow as tf
+from nltk.tokenize import sent_tokenize
+from tensorflow import keras
+
+from loader import DataManager
 
 
 class NewsSummarizationModel:

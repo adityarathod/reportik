@@ -1,4 +1,5 @@
 import os
+
 import requests
 
 release_root = 'https://github.com/applecrazy/reportik/releases/latest/download/'

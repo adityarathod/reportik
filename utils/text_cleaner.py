@@ -1,10 +1,11 @@
 import re
+
 from nltk.tokenize import sent_tokenize
 
 text_replacements = {
-        'U. S.': 'US',
-        'U. K.': 'UK',
-        'Sen.': 'Sen'
+    'U. S.': 'US',
+    'U. K.': 'UK',
+    'Sen.': 'Sen'
 }
 
 

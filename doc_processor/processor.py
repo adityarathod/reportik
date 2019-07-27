@@ -1,7 +1,9 @@
-from tensorflow import keras
-from sklearn.model_selection import train_test_split
 import os
 import pickle
+
+from sklearn.model_selection import train_test_split
+from tensorflow import keras
+
 import utils
 
 
@@ -40,7 +42,8 @@ class DocumentCleaner:
     def tokenize_texts(self, max_length=1300, vocab_size=5000):
         print(f'Tokenizing documents...', end='')
         self.text_vocab_size = vocab_size
-        tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
+        tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>',
+                                                       filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
         tokenizer.fit_on_texts(self.texts)
         seq = tokenizer.texts_to_sequences(self.texts)
         self.texts = keras.preprocessing.sequence.pad_sequences(seq, maxlen=max_length, truncating='post')
@@ -65,7 +68,8 @@ class DocumentCleaner:
     def tokenize_summaries(self, max_length=150, vocab_size=5000):
         print(f'Tokenizing summaries...', end='')
         self.summaries_vocab_size = vocab_size
-        tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
+        tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>',
+                                                       filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
         tokenizer.fit_on_texts(self.summaries)
         seq = tokenizer.texts_to_sequences(self.summaries)
         self.summaries = keras.preprocessing.sequence.pad_sequences(seq, maxlen=max_length, truncating='post')
@@ -83,7 +87,8 @@ class DocumentCleaner:
         self.clean_summaries()
         self.tokenize_summaries()
 
-    def split_and_dump_data(self, save_dir='../data', data_filename='cnbc_data.pkl', tokenizer_filename='cnbc_tokenizers.pkl'):
+    def split_and_dump_data(self, save_dir='../data', data_filename='cnbc_data.pkl',
+                            tokenizer_filename='cnbc_tokenizers.pkl'):
         texts_train, texts_test, summ_train, summ_test = train_test_split(
             self.texts,
             self.summaries,
@@ -96,6 +101,7 @@ class DocumentCleaner:
             pickle.dump((texts_test, summ_test), of)
         with open(os.path.join(save_dir, tokenizer_filename), 'wb') as of2:
             pickle.dump((self.text_tokenizer, self.summary_tokenizer), of2)
+
 
 if __name__ == '__main__':
     cleaner = DocumentCleaner(texts='../data/documents', summaries='../data/summaries')
