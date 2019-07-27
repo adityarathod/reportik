@@ -1,11 +1,14 @@
 import os
+
 import requests
 
 release_root = 'https://github.com/applecrazy/reportik/releases/latest/download/'
 files = [
     'cnbc_tokenizers.pkl',
     'test_cnbc_data.pkl',
-    'train_cnbc_data.pkl'
+    'train_cnbc_data.pkl',
+    'doc_emb.bin',
+    'summ_emb.bin'
 ]
 
 data_dir = os.path.join(os.getcwd(), 'data')
