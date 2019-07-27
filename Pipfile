@@ -2,6 +2,7 @@
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
+skip_lock = true
 
 [dev-packages]
 pydot = "*"
@@ -12,10 +13,12 @@ selenium = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 newspaper3k = "*"
-tensorflow = "==2.0.0b1"
+tensorflow = "==1.14.0"
 fasttext = "*"
 tensorflow-datasets = "*"
 scikit-learn = "*"
+recurrentshop = {editable = true,git = "https://github.com/farizrahman4u/recurrentshop.git"}
+seq2seq = {editable = true,git = "https://github.com/farizrahman4u/seq2seq.git"}
 
 [requires]
 python_version = "3.7"

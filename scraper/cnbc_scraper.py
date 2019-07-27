@@ -1,11 +1,11 @@
-from bs4 import BeautifulSoup
-from multiprocessing.dummy import Pool as ThreadPool
-import requests
-import time
-import os
-import newspaper
-import re
 import hashlib
+import os
+import re
+from multiprocessing.dummy import Pool as ThreadPool
+
+import newspaper
+import requests
+from bs4 import BeautifulSoup
 
 
 class CNBCScraper:
