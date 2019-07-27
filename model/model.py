@@ -28,9 +28,9 @@ class NewsSummarizationModel:
     def build_model(self, latent_dim=20):
         self.model = seq2seq.AttentionSeq2Seq(
             input_dim=100,
-            input_length=len(data.train_documents[0]),
+            input_length=len(self.data.train_documents[0]),
             hidden_dim=latent_dim,
-            output_length=len(data.train_summaries[0]),
+            output_length=len(self.data.train_summaries[0]),
             output_dim=100,
             depth=4
         )
