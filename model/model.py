@@ -26,7 +26,7 @@ class NewsSummarizationModel:
         self.batch_size = batch_size
 
     def build_model(self):
-        latent_dim = 64
+        latent_dim = 4
         embedding_dim = 64
         encoder_inputs = keras.Input(shape=(None,), name='encoder_inputs')
         encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words,
@@ -112,7 +112,6 @@ class NewsSummarizationModel:
         fixed_txt = fixed_txt.replace('\n', ' <NEWLINE> ')
         sentences = sent_tokenize(fixed_txt)
         sentences = [self.clean_sentence(s.strip()) for s in sentences]
-        print('\n'.join(sentences))
         return ''.join(sentences) + '<EOS>'
 
     def infer(self, document_text):
