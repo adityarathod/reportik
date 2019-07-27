@@ -70,6 +70,16 @@ class DataManager:
         total = train_len + test_len
         return floor(total * self.val_split)
 
+    def doc_index_to_vec(self, x):
+        return self.document_embeddings.get_word_vector(
+            self.document_tokenizer.index_word[x]
+        )
+
+    def summ_index_to_vec(self, x):
+        return self.summary_embeddings.get_word_vector(
+            self.summary_tokenizer.index_word[x]
+        )
+
     def generator(self, batch_size=32, gen_type='train'):
         cur_i = 0
         docs = getattr(self, gen_type + '_documents')
