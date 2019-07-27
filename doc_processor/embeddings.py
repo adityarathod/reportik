@@ -1,16 +1,17 @@
-from doc_processor.processor import DocumentCleaner
+import utils
 import fasttext
 import os
+import utils
 
 
 def learn_embeddings(texts_dir='../data/documents', summaries_dir='../data/summaries'):
     print('Processing files located in', texts_dir, '...')
     document_file = open('./tmp-doc-emb.txt', 'w+')
     for file in os.listdir(texts_dir):
-        if DocumentCleaner.is_hidden_file(file):
+        if utils.is_hidden_file(file):
             continue
         with open(os.path.join(texts_dir, file), 'r', errors='ignore') as f:
-            document_file.write(f.read() + '\n\n\n')
+            document_file.write(utils.clean_text(f.read()) + '\n')
     print('Done.')
     document_file.close()
     print('Training word embeddings...')
@@ -20,10 +21,10 @@ def learn_embeddings(texts_dir='../data/documents', summaries_dir='../data/summa
     print('Processing files located in', summaries_dir, '...')
     summ_file = open('./tmp-summ-emb.txt', 'w+')
     for file in os.listdir(summaries_dir):
-        if DocumentCleaner.is_hidden_file(file):
+        if utils.is_hidden_file(file):
             continue
         with open(os.path.join(summaries_dir, file), 'r', errors='ignore') as f:
-            summ_file.write(f.read() + '\n\n\n')
+            summ_file.write(utils.clean_text(f.read()) + '\n')
     print('Done.')
     summ_file.close()
     print('Training word embeddings...')
