@@ -140,4 +140,7 @@ dmypy.json
 # model logs
 model/logs
 .idea/workspace.xml
-*.xml
+logs
+
+# trained models
+trained_model/
