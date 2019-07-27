@@ -4,6 +4,7 @@ import os
 import pickle
 import utils
 
+
 class DocumentCleaner:
     texts = None
     texts_dir = None
