@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7787c89c-4786-40b1-a784-c8bdef5506eb" name="Default Changelist" comment="Decrease learning rate">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc_processor/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/doc_processor/processor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/model.py" afterDir="false" />
     </list>
@@ -14,11 +15,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/loader/dataman.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5">
+              <caret line="71" column="23" selection-start-line="71" selection-start-column="23" selection-end-line="71" selection-end-column="23" />
+              <folding>
+                <marker date="1564009708601" expanded="false" signature="120:423" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
+            <state relative-caret-position="520">
+              <caret line="122" column="71" selection-start-line="122" selection-start-column="71" selection-end-line="122" selection-end-column="71" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -27,12 +40,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/loader/dataman.py">
+        <entry file="file://$PROJECT_DIR$/doc_processor/processor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1476">
-              <caret line="94" column="32" selection-start-line="94" selection-start-column="32" selection-end-line="94" selection-end-column="32" />
+            <state relative-caret-position="2196">
+              <caret line="122" column="33" selection-start-line="122" selection-start-column="33" selection-end-line="122" selection-end-column="33" />
               <folding>
-                <marker date="1564009708601" expanded="false" signature="120:423" ph="..." />
+                <element signature="e#0#28#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -41,11 +54,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
+            <state>
+              <caret column="22" selection-start-column="22" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -116,8 +126,8 @@
         <option value="$PROJECT_DIR$/download_data.py" />
         <option value="$PROJECT_DIR$/loader/dataman.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/doc_processor/processor.py" />
         <option value="$PROJECT_DIR$/model/model.py" />
+        <option value="$PROJECT_DIR$/doc_processor/processor.py" />
       </list>
     </option>
   </component>
@@ -131,7 +141,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -163,6 +172,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -195,7 +205,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.processor">
     <configuration name="cnbc_scraper" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="reportik" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -315,9 +325,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.processor" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.download_data" />
-        <item itemvalue="Python.processor" />
         <item itemvalue="Python.cnbc_scraper" />
         <item itemvalue="Python.model" />
       </list>
@@ -359,7 +369,8 @@
       <workItem from="1564022801949" duration="3441000" />
       <workItem from="1564102102252" duration="1832000" />
       <workItem from="1564147108400" duration="2816000" />
-      <workItem from="1564172796250" duration="891000" />
+      <workItem from="1564172796250" duration="4710000" />
+      <workItem from="1564195627997" duration="981000" />
     </task>
     <task id="LOCAL-00001" summary="Add multithreaded scraper">
       <created>1562708266585</created>
@@ -536,11 +547,25 @@
       <option name="project" value="LOCAL" />
       <updated>1564158091245</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Make LSTM bidirection because I don't know what life is anymore">
+      <created>1564176608171</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1564176608171</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Just kidding I don't want bidirectional LSTMs">
+      <created>1564176888469</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1564176888469</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="120704000" />
+    <option name="totallyTimeSpent" value="125504000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -555,7 +580,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3319027" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.33619457" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -610,7 +635,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/scraper" />
     </ignored-roots>
-    <MESSAGE value="Add multithreaded scraper" />
     <MESSAGE value="Add basic encoder and decoder structure" />
     <MESSAGE value="Commit absolutely broken code" />
     <MESSAGE value="Clean up file hierarchy, improve data and tokenization saving (still has broken model.py)" />
@@ -634,12 +658,14 @@
     <MESSAGE value="Decrease learning rate" />
     <MESSAGE value="Everything is broken" />
     <MESSAGE value="Please please reduce overfitting" />
-    <option name="LAST_COMMIT_MESSAGE" value="Please please reduce overfitting" />
+    <MESSAGE value="Make LSTM bidirection because I don't know what life is anymore" />
+    <MESSAGE value="Just kidding I don't want bidirectional LSTMs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Just kidding I don't want bidirectional LSTMs" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/reportik$processor.coverage" NAME="processor Coverage Results" MODIFIED="1563909624810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/doc_processor" />
+    <SUITE FILE_PATH="coverage/reportik$processor.coverage" NAME="processor Coverage Results" MODIFIED="1564188698901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/doc_processor" />
     <SUITE FILE_PATH="coverage/reportik$vocab_generation.coverage" NAME="vocab_generation Coverage Results" MODIFIED="1563684412383" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocessing" />
-    <SUITE FILE_PATH="coverage/reportik$main.coverage" NAME="main Coverage Results" MODIFIED="1564157286852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/reportik$main.coverage" NAME="main Coverage Results" MODIFIED="1564179942606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/reportik$model.coverage" NAME="model Coverage Results" MODIFIED="1563829025189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/reportik$embeddings.coverage" NAME="embeddings Coverage Results" MODIFIED="1563586202764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/doc_processor" />
     <SUITE FILE_PATH="coverage/reportik$cnbc_scraper.coverage" NAME="cnbc_scraper Coverage Results" MODIFIED="1563840420387" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scraper" />
@@ -697,13 +723,13 @@
     <entry file="file://$PROJECT_DIR$/data/points/0a6d9e897ecf3a0cbf802804d9e95ee2.txt" />
     <entry file="file://$PROJECT_DIR$/data/points/0a1cb3477694353c6e953dea800042a3.txt" />
     <entry file="file://$PROJECT_DIR$/data_backups/a.txt">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="-1003" />
+      </provider>
       <provider selected="true" editor-type-id="LargeFileEditor">
         <state relative-caret-position="15746">
           <caret line="12281" column="1582" selection-start-line="12281" selection-start-column="1577" selection-end-line="12281" selection-end-column="1582" />
         </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="-1003" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scraper/main.py" />
@@ -824,38 +850,35 @@
     <entry file="file://$PROJECT_DIR$/model.png" />
     <entry file="file://$PROJECT_DIR$/doc_processor/processor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="69" column="24" lean-forward="true" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
+        <state relative-caret-position="2196">
+          <caret line="122" column="33" selection-start-line="122" selection-start-column="33" selection-end-line="122" selection-end-column="33" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="22" selection-start-column="22" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/loader/dataman.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1476">
-          <caret line="94" column="32" selection-start-line="94" selection-start-column="32" selection-end-line="94" selection-end-column="32" />
+        <state relative-caret-position="5">
+          <caret line="71" column="23" selection-start-line="71" selection-start-column="23" selection-end-line="71" selection-end-column="23" />
           <folding>
             <marker date="1564009708601" expanded="false" signature="120:423" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
+        <state relative-caret-position="520">
+          <caret line="122" column="71" selection-start-line="122" selection-start-column="71" selection-end-line="122" selection-end-column="71" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>

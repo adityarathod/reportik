@@ -58,7 +58,7 @@ class DocumentCleaner:
                 self.texts.append('<START> ' + ''.join(sentences) + '<EOS>')
         print('done.')
 
-    def tokenize_texts(self, max_length=1300, vocab_size=50000):
+    def tokenize_texts(self, max_length=1300, vocab_size=5000):
         print(f'Tokenizing documents...', end='')
         self.text_vocab_size = vocab_size
         tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
@@ -89,7 +89,7 @@ class DocumentCleaner:
                 self.summaries.append('<START> ' + ''.join(sentences) + '<EOS>')
         print('done.')
 
-    def tokenize_summaries(self, max_length=150, vocab_size=27000):
+    def tokenize_summaries(self, max_length=150, vocab_size=5000):
         print(f'Tokenizing summaries...', end='')
         self.summaries_vocab_size = vocab_size
         tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>', filters='!"#$%&()*+,-–—./:;=?@[\\]^_`{|}~\t\n')
@@ -110,7 +110,12 @@ class DocumentCleaner:
         self.tokenize_summaries()
 
     def split_and_dump_data(self, save_dir='../data', data_filename='cnbc_data.pkl', tokenizer_filename='cnbc_tokenizers.pkl'):
-        texts_train, texts_test, summ_train, summ_test = train_test_split(self.texts, self.summaries, test_size=0.2, random_state=42)
+        texts_train, texts_test, summ_train, summ_test = train_test_split(
+            self.texts,
+            self.summaries,
+            test_size=0.2,
+            random_state=420
+        )
         with open(os.path.join(save_dir, 'train_' + data_filename), 'wb') as of:
             pickle.dump((texts_train, summ_train), of)
         with open(os.path.join(save_dir, 'test_' + data_filename), 'wb') as of:

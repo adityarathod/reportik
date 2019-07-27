@@ -1,8 +1,10 @@
 from tensorflow import keras
+from nltk.tokenize import sent_tokenize
 from loader import DataManager
 import tensorflow as tf
 import numpy as np
 import os
+import re
 
 
 class NewsSummarizationModel:
@@ -12,6 +14,11 @@ class NewsSummarizationModel:
     embedding_dim = None
     batch_size = None
     data = None
+    text_replacements = {
+        'U. S.': 'US',
+        'U. K.': 'UK',
+        'Sen.': 'Sen'
+    }
 
     def __init__(self, manager: DataManager, embedding_dim=100, batch_size=32):
         self.data = manager
@@ -19,8 +26,8 @@ class NewsSummarizationModel:
         self.batch_size = batch_size
 
     def build_model(self):
-        latent_dim = 32
-        embedding_dim = 200
+        latent_dim = 64
+        embedding_dim = 64
         encoder_inputs = keras.Input(shape=(None,), name='encoder_inputs')
         encoder_embedding = keras.layers.Embedding(input_dim=self.data.document_tokenizer.num_words,
                                                    output_dim=embedding_dim,
@@ -94,11 +101,26 @@ class NewsSummarizationModel:
     def _gl(self, name):
         return self.model.get_layer(name)
 
+    def clean_sentence(self, s: str):
+        out = s[:-1]
+        for orig, new in self.text_replacements.items():
+            out = out.replace(orig, new)
+        return out + ' <PUNCT> '
+
+    def process_text(self, doc_text):
+        fixed_txt = re.sub(r'\.(?=[^ \W\d])', '. ', doc_text)
+        fixed_txt = fixed_txt.replace('\n', ' <NEWLINE> ')
+        sentences = sent_tokenize(fixed_txt)
+        sentences = [self.clean_sentence(s.strip()) for s in sentences]
+        print('\n'.join(sentences))
+        return ''.join(sentences) + '<EOS>'
+
     def infer(self, document_text):
+        max_doc_len = len(self.data.train_documents[0])
         max_seq_len = len(self.data.train_summaries[0])
 
-        doc_seq = self.data.document_tokenizer.texts_to_sequences([document_text + ' <EOS>'])
-        doc_seq = keras.preprocessing.sequence.pad_sequences(doc_seq, max_seq_len, truncating='post')
+        doc_seq = self.data.document_tokenizer.texts_to_sequences([self.process_text(document_text)])
+        doc_seq = keras.preprocessing.sequence.pad_sequences(doc_seq, max_doc_len, truncating='post')
 
         tar_seq = np.zeros((1, 1, self.data.summary_tokenizer.num_words))
         tar_seq[0, 0, self.data.summary_tokenizer.word_index['<start>']] = 1.
