@@ -8,6 +8,7 @@ from tensorflow import keras
 
 from loader import DataManager
 import seq2seq
+import recurrentshop
 import utils
 
 
@@ -62,7 +63,7 @@ class NewsSummarizationModel:
         )
 
     def save(self, path, filename='model'):
-        self.model.save(os.path.join(path, filename + '-seq2seq-attn.h5'))
+        self.model.save_weights(os.path.join(path, filename + '-seq2seq-attn-weights.h5'))
 
     def view_document_text(self, document):
         return self.data.document_tokenizer.sequences_to_texts([document])[0]
@@ -70,9 +71,9 @@ class NewsSummarizationModel:
     def view_summary_text(self, summary):
         return self.data.summary_tokenizer.sequences_to_texts([summary])[0]
 
-    def load(self, overall_model_path, encoder_path, decoder_path):
-        print('Loading saved models...')
-        self.model = keras.models.load_model(overall_model_path)
+    def load(self, path):
+        print('Loading saved model weights...')
+        self.model = self.model.load_weights(path)
 
     def infer(self, document_text):
         max_doc_len = len(self.data.train_documents[0])
