@@ -18,6 +18,7 @@ class DataManager:
     val_summaries = None
     summary_tokenizer: keras.preprocessing.text.Tokenizer = None
     summary_embeddings = None
+    summ_emb_path = None
     val_split = None
 
     def __init__(self,
@@ -63,6 +64,7 @@ class DataManager:
     def load_embeddings(self, saved_dir, doc_emb, summ_emb):
         print('Loading embeddings...', end='')
         self.document_embeddings = ft.load_model(os.path.join(saved_dir, doc_emb))
+        self.summ_emb_path = os.path.join(saved_dir, summ_emb)
         self.summary_embeddings = ft.load_model(os.path.join(saved_dir, summ_emb))
         print('done.')
 

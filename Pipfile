@@ -20,6 +20,7 @@ scikit-learn = "*"
 recurrentshop = {editable = true,git = "https://github.com/farizrahman4u/recurrentshop.git"}
 seq2seq = {editable = true,git = "https://github.com/farizrahman4u/seq2seq.git"}
 matplotlib = "*"
+gensim = "*"
 
 [requires]
 python_version = "3.7"

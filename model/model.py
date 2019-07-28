@@ -3,12 +3,11 @@ import re
 
 import numpy as np
 import tensorflow as tf
-from nltk.tokenize import sent_tokenize
 from tensorflow import keras
+from gensim.models.wrappers import FastText
 
 from loader import DataManager
 import seq2seq
-import recurrentshop
 import utils
 
 
@@ -73,14 +72,21 @@ class NewsSummarizationModel:
 
     def load(self, path):
         print('Loading saved model weights...')
-        self.model = self.model.load_weights(path)
+        self.model.load_weights(path)
 
     def infer(self, document_text):
         max_doc_len = len(self.data.train_documents[0])
         doc_seq = self.data.document_tokenizer.texts_to_sequences([utils.clean_text(document_text)])
         doc_seq = keras.preprocessing.sequence.pad_sequences(doc_seq, max_doc_len, truncating='post')
-        doc_seq = np.array([data.doc_index_to_vec(x) for x in doc_seq])
-        return self.model.predict(doc_seq)
+        doc_seq = np.squeeze(doc_seq)
+        doc_seq = np.array([self.data.doc_index_to_vec(x) for x in doc_seq])
+        doc_seq = np.reshape(doc_seq, (1, -1, 100))
+        summ_seq = self.model.predict(doc_seq)
+        m = FastText.load_fasttext_format(self.data.summ_emb_path)
+        summ_seq = np.reshape(summ_seq, (150, 100))
+        print(summ_seq.shape)
+        for x in summ_seq:
+            print(np.squeeze(m.wv.similar_by_vector(x, topn=2)))
 
 
 if __name__ == '__main__':
