@@ -4,7 +4,6 @@ import re
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from gensim.models.wrappers import FastText
 
 from loader import DataManager
 import seq2seq
@@ -27,11 +26,11 @@ class NewsSummarizationModel:
 
     def build_model(self, latent_dim=20):
         self.model = seq2seq.AttentionSeq2Seq(
-            input_dim=100,
+            input_dim=25,
             input_length=len(self.data.train_documents[0]),
             hidden_dim=latent_dim,
             output_length=len(self.data.train_summaries[0]),
-            output_dim=100,
+            output_dim=25,
             depth=4
         )
 
@@ -79,14 +78,13 @@ class NewsSummarizationModel:
         doc_seq = self.data.document_tokenizer.texts_to_sequences([utils.clean_text(document_text)])
         doc_seq = keras.preprocessing.sequence.pad_sequences(doc_seq, max_doc_len, truncating='post')
         doc_seq = np.squeeze(doc_seq)
-        doc_seq = np.array([self.data.doc_index_to_vec(x) for x in doc_seq])
-        doc_seq = np.reshape(doc_seq, (1, -1, 100))
+        doc_seq = np.array([self.data.index_to_vec(x) for x in doc_seq])
+        doc_seq = np.reshape(doc_seq, (1, -1, 25))
         summ_seq = self.model.predict(doc_seq)
-        m = FastText.load_fasttext_format(self.data.summ_emb_path)
-        summ_seq = np.reshape(summ_seq, (150, 100))
+        summ_seq = np.reshape(summ_seq, (150, 25))
         print(summ_seq.shape)
         for x in summ_seq:
-            print(np.squeeze(m.wv.similar_by_vector(x, topn=2)))
+            print(np.squeeze(self.data.embeddings.similar_by_vector(x, topn=2)))
 
 
 if __name__ == '__main__':

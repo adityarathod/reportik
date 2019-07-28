@@ -2,7 +2,7 @@ import os
 import pickle
 from math import floor
 
-import fasttext as ft
+import gensim.downloader as api
 import numpy as np
 from tensorflow import keras
 
@@ -12,28 +12,25 @@ class DataManager:
     test_documents = None
     val_documents = None
     document_tokenizer: keras.preprocessing.text.Tokenizer = None
-    document_embeddings = None
     train_summaries = None
     test_summaries = None
     val_summaries = None
     summary_tokenizer: keras.preprocessing.text.Tokenizer = None
-    summary_embeddings = None
     summ_emb_path = None
     val_split = None
+    embeddings = None
 
     def __init__(self,
                  saved_dir='../data',
                  train_data_filename='train_cnbc_data.pkl',
                  test_data_filename='test_cnbc_data.pkl',
                  tokenizer_filename='cnbc_tokenizers.pkl',
-                 doc_emb_filename='doc_emb.bin',
-                 summ_emb_filename='summ_emb.bin',
                  val_split=0.1):
         self.val_split = val_split
         self.load_train_data(saved_dir, train_data_filename)
         self.load_test_data(saved_dir, test_data_filename)
         self.load_tokenizers(saved_dir, tokenizer_filename)
-        self.load_embeddings(saved_dir, doc_emb_filename, summ_emb_filename)
+        self.load_embeddings()
 
     def load_train_data(self, saved_dir, data_filename):
         data_pickle_path = os.path.join(saved_dir, data_filename)
@@ -61,45 +58,49 @@ class DataManager:
             (self.document_tokenizer, self.summary_tokenizer) = pickle.load(f)
         print('done.')
 
-    def load_embeddings(self, saved_dir, doc_emb, summ_emb):
+    def load_embeddings(self):
         print('Loading embeddings...', end='')
-        self.document_embeddings = ft.load_model(os.path.join(saved_dir, doc_emb))
-        self.summ_emb_path = os.path.join(saved_dir, summ_emb)
-        self.summary_embeddings = ft.load_model(os.path.join(saved_dir, summ_emb))
+        self.embeddings = api.load('glove-twitter-25')
         print('done.')
 
     def calc_val_idx(self, train_len, test_len):
         total = train_len + test_len
         return floor(total * self.val_split)
 
-    def doc_index_to_vec(self, x):
-        return self.document_embeddings.get_word_vector(
-            self.document_tokenizer.index_word[x]
-        )
-
-    def summ_index_to_vec(self, x):
-        return self.summary_embeddings.get_word_vector(
-            self.summary_tokenizer.index_word[x]
-        )
+    def index_to_vec(self, x):
+        word = None
+        try:
+            word = self.document_tokenizer.index_word[x]
+        except KeyError:
+            if x == 0:
+                word = 'pad'
+            elif x == 41:
+                word = 'start'
+            elif x == 42:
+                word = 'eos'
+            else:
+                word = 'unk'
+        try:
+            return self.embeddings[word]
+        except KeyError:
+            return np.zeros(shape=(25, ))
 
     def generator(self, batch_size=32, gen_type='train'):
         cur_i = 0
         docs = getattr(self, gen_type + '_documents')
         summaries = getattr(self, gen_type + '_summaries')
-        doc_conv = lambda x: self.document_embeddings.get_word_vector(self.document_tokenizer.index_word[x])
-        summ_conv = lambda x: self.summary_embeddings.get_word_vector(self.summary_tokenizer.index_word[x])
 
         while True:
             encoder_in = np.zeros(
-                (batch_size, len(docs[0]), 100),
+                (batch_size, len(docs[0]), 25),
                 dtype='float32')
             decoder_target = np.zeros(
-                (batch_size, len(summaries[0]), 100),
+                (batch_size, len(summaries[0]), 25),
                 dtype='float32')
             for i, (input_text, target_text) in enumerate(
                     zip(docs[cur_i:cur_i + batch_size, :],
                         summaries[cur_i:cur_i + batch_size, :])):
-                encoder_in[i] = np.array([doc_conv(x) for x in input_text])
-                decoder_target[i] = np.array([summ_conv(x) for x in target_text])
+                encoder_in[i] = np.array([self.index_to_vec(x) for x in input_text])
+                decoder_target[i] = np.array([self.index_to_vec(x) for x in target_text])
             cur_i += batch_size
             yield encoder_in, decoder_target
