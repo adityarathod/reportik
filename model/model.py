@@ -38,7 +38,7 @@ class NewsSummarizationModel:
 
         self.model.compile(
             loss='mse',
-            optimizer=keras.optimizers.RMSprop(),
+            optimizer='rmsprop',
             metrics=['acc']
         )
 
