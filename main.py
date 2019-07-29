@@ -49,7 +49,7 @@ def main():
         model.train(epochs=1)
         model.save(
             os.getcwd(),
-            f'cnbc-{latent_dim}-units-{embedding_size}-emb-epoch-{j}.h5'
+            f'cnbc-{num_cells}units-{latent_dim}latent-{embedding_size}emb-{j}epoch'
         )
         print(model.evaluate())
         print(model.infer(example_text))
