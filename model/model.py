@@ -29,19 +29,20 @@ class NewsSummarizationModel:
         self.data = manager
         self.batch_size = batch_size
 
-    def build_model(self, latent_dim=20):
+    def build_model(self, latent_dim=20, depth=4):
         """
         Create and compile a AttentionSeq2Seq model with the configured parameters.
         :param latent_dim: The dimension of the hidden state of the encoder.
+        :param depth: The number of cells inside the encoder and decoder.
         """
         print('[INFO] Compiling model...')
         self.model = seq2seq.AttentionSeq2Seq(
-            input_dim=25,
+            input_dim=self.data.embedding_size,
             input_length=len(self.data.train_documents[0]),
             hidden_dim=latent_dim,
             output_length=len(self.data.train_summaries[0]),
-            output_dim=25,
-            depth=4
+            output_dim=self.data.embedding_size,
+            depth=depth
         )
 
         self.model.compile(
