@@ -33,9 +33,9 @@ Gilroy is about 30 miles (48 km) southeast of San Jose.'''
 
 
 def main():
-    latent_dim = 64
+    latent_dim = 128
     embedding_size = 100
-    num_cells = 8
+    num_cells = 4
     manager = DataManager(saved_dir='./data', embedding_size=embedding_size)
     model = NewsSummarizationModel(manager)
     model.build_model(latent_dim=latent_dim, depth=num_cells)
