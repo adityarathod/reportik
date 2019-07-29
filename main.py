@@ -1,7 +1,7 @@
 import os
 
 from loader import DataManager
-from model.model import NewsSummarizationModel
+from model import NewsSummarizationModel
 
 example_text = '''Police and ambulances raced to a shooting at a food festival in California on Sunday, and video posted on social media showed people at the event running for cover as shots rang out.
 
