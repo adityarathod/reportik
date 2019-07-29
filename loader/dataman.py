@@ -2,7 +2,7 @@ import os
 import pickle
 from math import floor
 
-import gensim.downloader as api
+import gensim
 import numpy as np
 from tensorflow import keras
 
@@ -26,14 +26,14 @@ class DataManager:
                  train_data_filename='train_cnbc_data.pkl',
                  test_data_filename='test_cnbc_data.pkl',
                  tokenizer_filename='cnbc_tokenizers.pkl',
-                 val_split=0.1,
-                 embedding_size=25):
+                 embedding_filename='cc.en.300.bin',
+                 val_split=0.1):
         self.val_split = val_split
         self.load_train_data(saved_dir, train_data_filename)
         self.load_test_data(saved_dir, test_data_filename)
         self.load_tokenizers(saved_dir, tokenizer_filename)
-        self.embedding_size = embedding_size
-        self.load_embeddings()
+        self.embedding_size = 300
+        self.load_embeddings(saved_dir, embedding_filename)
 
     def load_train_data(self, saved_dir, data_filename):
         data_pickle_path = os.path.join(saved_dir, data_filename)
@@ -61,9 +61,9 @@ class DataManager:
             (self.document_tokenizer, self.summary_tokenizer) = pickle.load(f)
         print('[INFO] Done loading tokenizers.')
 
-    def load_embeddings(self):
+    def load_embeddings(self, saved_dir, filename):
         print('[INFO] Loading embeddings...')
-        self.embeddings = api.load('glove-twitter-' + str(self.embedding_size))
+        self.embeddings = gensim.models.fasttext.load_facebook_vectors(os.path.join(saved_dir, filename))
         print('[INFO] Done loading embeddings.')
 
     def calc_val_idx(self, train_len, test_len):
@@ -84,7 +84,7 @@ class DataManager:
             else:
                 word = 'unk'
         try:
-            return self.embeddings[word]
+            return self.embeddings.get_vector(word)
         except KeyError:
             return np.zeros(shape=(self.embedding_size, ))
 

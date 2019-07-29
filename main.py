@@ -34,9 +34,8 @@ Gilroy is about 30 miles (48 km) southeast of San Jose.'''
 
 def main():
     latent_dim = 128
-    embedding_size = 100
     num_cells = 4
-    manager = DataManager(saved_dir='./data', embedding_size=embedding_size)
+    manager = DataManager(saved_dir='./data')
     model = NewsSummarizationModel(manager)
     model.build_model(latent_dim=latent_dim, depth=num_cells)
     print('[INFO] Model sanity check:')
@@ -49,7 +48,7 @@ def main():
         model.train(epochs=1)
         model.save(
             os.getcwd(),
-            f'cnbc-{num_cells}units-{latent_dim}latent-{embedding_size}emb-{j}epoch'
+            f'cnbc-{num_cells}units-{latent_dim}latent-{300}emb-{j}epoch'
         )
         print(model.evaluate())
         print(model.infer(example_text))

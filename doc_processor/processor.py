@@ -39,7 +39,7 @@ class DocumentCleaner:
                 self.texts.append(utils.clean_text(txt))
         print('done.')
 
-    def tokenize_texts(self, max_length=1300, vocab_size=5000):
+    def tokenize_texts(self, max_length=1300, vocab_size=50000):
         print(f'Tokenizing documents...', end='')
         self.text_vocab_size = vocab_size
         tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>',
@@ -65,7 +65,7 @@ class DocumentCleaner:
                 self.summaries.append(utils.clean_text(txt))
         print('done.')
 
-    def tokenize_summaries(self, max_length=150, vocab_size=5000):
+    def tokenize_summaries(self, max_length=150, vocab_size=50000):
         print(f'Tokenizing summaries...', end='')
         self.summaries_vocab_size = vocab_size
         tokenizer = keras.preprocessing.text.Tokenizer(num_words=vocab_size, oov_token='<unk>',

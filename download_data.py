@@ -6,9 +6,7 @@ release_root = 'https://github.com/applecrazy/reportik/releases/latest/download/
 files = [
     'cnbc_tokenizers.pkl',
     'test_cnbc_data.pkl',
-    'train_cnbc_data.pkl',
-    'doc_emb.bin',
-    'summ_emb.bin'
+    'train_cnbc_data.pkl'
 ]
 
 data_dir = os.path.join(os.getcwd(), 'data')
@@ -24,5 +22,8 @@ for file in files:
     with open(temp_path, 'wb+') as f:
         res = requests.get(release_root + file)
         f.write(res.content)
+
+
+print('[INFO] Please download ee.en.300.bin.')
 
 print('[INFO] Done.')
