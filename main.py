@@ -38,12 +38,13 @@ def main():
     manager = DataManager(saved_dir='./data', embedding_size=embedding_size)
     model = NewsSummarizationModel(manager)
     model.build_model(latent_dim=latent_dim)
+    print('[INFO] Model sanity check:')
     model.model.summary()
-    print('training...')
     # model.load('./cnbc-seq2seq-attn-weights.h5')
     # model.load('./cnbc-64-epoch-2-attn-weights.h5')
-    for i in range(2):
+    for i in range(3):
         j = i + 1
+        print(f'[INFO] Initiating epoch {j}...')
         model.train(epochs=1)
         model.save(
             os.getcwd(),

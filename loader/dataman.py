@@ -37,7 +37,7 @@ class DataManager:
 
     def load_train_data(self, saved_dir, data_filename):
         data_pickle_path = os.path.join(saved_dir, data_filename)
-        print('Loading', data_pickle_path, '...', end='')
+        print(f'[INFO] Loading training data from {data_pickle_path}...')
         with open(data_pickle_path, 'rb') as f:
             td, ts = pickle.load(f)
             split_idx = self.calc_val_idx(len(td), len(ts))
@@ -45,26 +45,26 @@ class DataManager:
             self.val_summaries = ts[:split_idx]
             self.train_documents = td[split_idx:]
             self.train_summaries = ts[split_idx:]
-        print('done.')
+        print('[INFO] Done loading training data.')
 
     def load_test_data(self, saved_dir, data_filename):
         data_pickle_path = os.path.join(saved_dir, data_filename)
-        print('Loading', data_pickle_path, '...', end='')
+        print(f'[INFO] Loading test data from {data_pickle_path}...')
         with open(data_pickle_path, 'rb') as f:
             (self.test_documents, self.test_summaries) = pickle.load(f)
-        print('done.')
+        print('[INFO] Done loading test data.')
 
     def load_tokenizers(self, saved_dir, tokenizer_filename):
         tokenizer_pickle_path = os.path.join(saved_dir, tokenizer_filename)
-        print('Loading', tokenizer_pickle_path, '...', end='')
+        print(f'[INFO] Loading tokenizers from {tokenizer_pickle_path}...')
         with open(tokenizer_pickle_path, 'rb') as f:
             (self.document_tokenizer, self.summary_tokenizer) = pickle.load(f)
-        print('done.')
+        print('[INFO] Done loading tokenizers.')
 
     def load_embeddings(self):
-        print('Loading embeddings...', end='')
+        print('[INFO] Loading embeddings...')
         self.embeddings = api.load('glove-twitter-' + str(self.embedding_size))
-        print('done.')
+        print('[INFO] Done loading embeddings.')
 
     def calc_val_idx(self, train_len, test_len):
         total = train_len + test_len
