@@ -3,7 +3,7 @@ import re
 
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
+import keras
 
 from loader import DataManager
 import seq2seq
@@ -47,7 +47,7 @@ class NewsSummarizationModel:
 
         self.model.compile(
             loss='mse',
-            optimizer='rmsprop',
+            optimizer='adam',
             metrics=['acc']
         )
         print('[INFO] Done compiling model.')
