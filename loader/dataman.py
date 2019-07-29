@@ -19,17 +19,20 @@ class DataManager:
     summ_emb_path = None
     val_split = None
     embeddings = None
+    embedding_size = None
 
     def __init__(self,
                  saved_dir='../data',
                  train_data_filename='train_cnbc_data.pkl',
                  test_data_filename='test_cnbc_data.pkl',
                  tokenizer_filename='cnbc_tokenizers.pkl',
-                 val_split=0.1):
+                 val_split=0.1,
+                 embedding_size=25):
         self.val_split = val_split
         self.load_train_data(saved_dir, train_data_filename)
         self.load_test_data(saved_dir, test_data_filename)
         self.load_tokenizers(saved_dir, tokenizer_filename)
+        self.embedding_size = embedding_size
         self.load_embeddings()
 
     def load_train_data(self, saved_dir, data_filename):
@@ -60,7 +63,7 @@ class DataManager:
 
     def load_embeddings(self):
         print('Loading embeddings...', end='')
-        self.embeddings = api.load('glove-twitter-25')
+        self.embeddings = api.load('glove-twitter-' + str(self.embedding_size))
         print('done.')
 
     def calc_val_idx(self, train_len, test_len):
@@ -83,7 +86,7 @@ class DataManager:
         try:
             return self.embeddings[word]
         except KeyError:
-            return np.zeros(shape=(25, ))
+            return np.zeros(shape=(self.embedding_size, ))
 
     def generator(self, batch_size=32, gen_type='train'):
         cur_i = 0
@@ -92,10 +95,10 @@ class DataManager:
 
         while True:
             encoder_in = np.zeros(
-                (batch_size, len(docs[0]), 25),
+                (batch_size, len(docs[0]), self.embedding_size),
                 dtype='float32')
             decoder_target = np.zeros(
-                (batch_size, len(summaries[0]), 25),
+                (batch_size, len(summaries[0]), self.embedding_size),
                 dtype='float32')
             for i, (input_text, target_text) in enumerate(
                     zip(docs[cur_i:cur_i + batch_size, :],

@@ -79,12 +79,14 @@ class NewsSummarizationModel:
         doc_seq = keras.preprocessing.sequence.pad_sequences(doc_seq, max_doc_len, truncating='post')
         doc_seq = np.squeeze(doc_seq)
         doc_seq = np.array([self.data.index_to_vec(x) for x in doc_seq])
-        doc_seq = np.reshape(doc_seq, (1, -1, 25))
+        doc_seq = np.reshape(doc_seq, (1, -1, self.data.embedding_size))
         summ_seq = self.model.predict(doc_seq)
-        summ_seq = np.reshape(summ_seq, (150, 25))
+        summ_seq = np.reshape(summ_seq, (150, self.data.embedding_size))
         print(summ_seq.shape)
+        words = []
         for x in summ_seq:
-            print(np.squeeze(self.data.embeddings.similar_by_vector(x, topn=2)))
+            words.append(np.squeeze(self.data.embeddings.similar_by_vector(x, topn=1))[0])
+        return ' '.join(words)
 
 
 if __name__ == '__main__':
